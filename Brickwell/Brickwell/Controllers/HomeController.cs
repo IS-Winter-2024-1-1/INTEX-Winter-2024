@@ -65,6 +65,13 @@ namespace Brickwell.Controllers
         }
 
         [HttpGet]
+        public IActionResult Cart()
+        {
+            // send the cart page
+            return View();
+        }
+
+        [HttpGet]
         public IActionResult ProceedToCheckout()
         {
             // send the confirm proceed to checkout page
@@ -104,6 +111,13 @@ namespace Brickwell.Controllers
         public IActionResult AdminPage()
         {
             // send the admin page
+            return View();
+        }
+
+        [HttpGet]
+        public IActionResult ListOrders()
+        {
+            // send the list orders page which is only accessible by the admin to see all the orders
             return View();
         }
 
@@ -175,6 +189,14 @@ namespace Brickwell.Controllers
             // Deletes the Customer from the Admins changes and then redirects back to the AdminPage
             return View();
         }
+
+        [HttpPost]
+        public IActionResult AddCustomer()
+        {
+            // Adds the Customer from the Admins changes and then redirects back to the AdminPage
+            return View();
+        }
+
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
