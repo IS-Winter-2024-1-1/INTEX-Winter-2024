@@ -5,6 +5,13 @@ using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// Configure Google SSO.
+builder.Services.AddAuthentication().AddGoogle(googleOptions =>
+{
+    googleOptions.ClientId = builder.Configuration.GetSection("Authentication:Google:ClientId").Value;
+    googleOptions.ClientSecret = builder.Configuration.GetSection("Authentication:Google:ClientSecret").Value;
+});
+
 // Add services to the container.
 var connectionString = builder.Configuration.GetConnectionString("AzureDBConnection") ?? throw new InvalidOperationException("Connection string 'AzureDBConnection' not found.");
 
@@ -19,7 +26,6 @@ cb.UserID = builder.Configuration.GetSection("sql:username").Value;
 cb.Password = builder.Configuration.GetSection("sql:password").Value;
 connectionString = cb.ConnectionString;
 
-
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(connectionString));
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
@@ -27,6 +33,18 @@ builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
     .AddEntityFrameworkStores<ApplicationDbContext>();
 builder.Services.AddControllersWithViews();
+
+// COOKIES!
+builder.Services.Configure<CookiePolicyOptions>(options =>
+{
+    // This lambda determines whether user consent for non-essential 
+    // cookies is needed for a given request.
+    options.CheckConsentNeeded = context => true;
+
+    options.MinimumSameSitePolicy = SameSiteMode.None;
+    options.ConsentCookieValue = "true";
+
+});
 
 var app = builder.Build();
 
@@ -44,6 +62,20 @@ else
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
+
+app.Use(async (ctx, next) =>
+{
+    ctx.Response.Headers.Append("Content-Security-Policy", // TODO: Keep this updated!
+                                "default-src 'self'" +
+                                "script-src 'self'" +
+                                "img-src 'self'" +
+                                "style-src 'self' 'unsafe-inline'");
+    await next();
+});
+
+
+// Do the needful.
+app.UseCookiePolicy();
 
 app.UseRouting();
 
