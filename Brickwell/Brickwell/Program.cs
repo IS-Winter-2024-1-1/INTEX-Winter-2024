@@ -1,12 +1,25 @@
 using Brickwell.Data;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
-using Brickwell.Areas.Identity.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
+var connectionString = builder.Configuration.GetConnectionString("AzureDBConnection") ?? throw new InvalidOperationException("Connection string 'AzureDBConnection' not found.");
+
+// Add the secrets.json file.
+builder.Configuration.AddJsonFile("secrets.json",
+        optional: false,
+        reloadOnChange: true);
+
+// Deconstruct the connectionString so we can add properties.
+var cb = new SqlConnectionStringBuilder(connectionString);
+cb.UserID = builder.Configuration.GetSection("sql:username").Value;
+cb.Password = builder.Configuration.GetSection("sql:password").Value;
+connectionString = cb.ConnectionString;
+
+
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(connectionString));
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
