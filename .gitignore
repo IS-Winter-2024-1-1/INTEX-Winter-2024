@@ -396,3 +396,10 @@ FodyWeavers.xsd
 
 # JetBrains Rider
 *.sln.iml
+
+# No Jetbrains files.
+**/.idea/*
+
+# Friends don't let friends commit secrets!!!
+*secrets.json
+secret*
