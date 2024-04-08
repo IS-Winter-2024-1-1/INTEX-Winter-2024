@@ -36,7 +36,7 @@ namespace Brickwell.Controllers
         }
 
         [HttpPost]
-        public IActionResult Login()
+        public IActionResult Login(string x)
         {
             // check the user credentials in the database
             //Log in or reject and redirect to index page
@@ -86,7 +86,7 @@ namespace Brickwell.Controllers
         }
 
         [HttpPost]
-        public IActionResult Checkout()
+        public IActionResult Checkout(string x)
         {
             // check the user credentials in the database
             //Log in or reject and redirect to index page
@@ -129,7 +129,7 @@ namespace Brickwell.Controllers
         }
 
         [HttpPost]
-        public IActionResult EditOrder()
+        public IActionResult EditOrder(string x)
         {
             // Edits the order from the Admins changes and then redirects back to the AdminPage
             return View();
@@ -142,7 +142,7 @@ namespace Brickwell.Controllers
             return View();
         }
         [HttpPost]
-        public IActionResult EditProduct()
+        public IActionResult EditProduct(string x)
         {
             // Edits the product from the Admins changes and then redirects back to the AdminPage
             return View();
@@ -156,7 +156,7 @@ namespace Brickwell.Controllers
         }
 
         [HttpPost]
-        public IActionResult EditCustomer()
+        public IActionResult EditCustomer(string x)
         {
             // Edits the customer from the Admins changes and then redirects back to the AdminPage
             return View();
