@@ -1,9 +1,11 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Brickwell.Models
 {
     public class Recommendation
     {
+        [Key]
         [ForeignKey("Product")]
         public int product_ID { get; set; }
         public Product Product { get; set; }
