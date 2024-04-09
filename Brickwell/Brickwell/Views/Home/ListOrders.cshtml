@@ -1,0 +1,37 @@
+﻿@{
+    ViewData["Title"] = "Fraudelent Orders Overview";
+}
+
+@model IQueryable<Order>
+
+<h1>@ViewData["Title"]</h1>
+
+<table>
+    <thead>
+        <tr>
+            <th>Transaction ID</th>
+            <th>Customer</th>
+            <th>Date</th>
+            <th>Time</th>
+            <th>Amount</th>
+            <th>Country</th>
+            <th>Shipping Address</th>
+            <th>Bank</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var order in Model)
+        {
+            <tr>
+                <td>@order.transaction_ID</td>
+                <td>@order.day_of_week</td>
+                <td>@order.date</td>
+                <td>@order.time</td>
+                <td>@order.amount</td>
+                <td>@order.country_of_transaction</td>
+                <td>@order.shipping_address</td>
+                <td>@order.bank</td>
+            </tr>
+        }
+    </tbody>
+</table>

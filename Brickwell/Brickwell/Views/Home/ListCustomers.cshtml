@@ -1,0 +1,48 @@
+﻿@{
+    ViewData["Title"] = "Customers Overview";
+}
+
+@model IQueryable<Customer>
+
+<h1>@ViewData["Title"]</h1>
+
+<table>
+    <thead>
+        <tr>
+            <th>Customer ID</th>
+            <th>Username/email</th>
+            <th>Name</th>
+            <th>Birth Day</th>
+            <th>Country</th>
+            <th>Gender</th>
+            <th>Age</th>
+            <th>Current Role</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var customer in Model)
+        {
+            <tr>
+                <td>@customer.customer_ID</td>
+                <td>@customer.username</td>
+                <td>@customer.last_name, @customer.first_name</td>
+                <td>@customer.birth_date</td>
+                <td>@customer.country_of_residence</td>
+                <td>@customer.gender</td>
+                <td>@customer.age</td>
+                <td>Their Role</td>
+                <td>
+                    <a class="btn btn-info" asp-controller="Home" asp-action="EditCustomer" asp-route-id="@customer.customer_ID">Edit</a>
+                    <form asp-controller="Home" asp-action="DeleteCustomer" method="post" style="display:inline;">
+                        <input type="hidden" name="product_ID" value="@customer.customer_ID" />
+                        <button type="submit" class="btn btn-danger">Delete</button>
+                    </form>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<a class="btn btn-info" asp-controller="Home" asp-action="AddCustomer">Add New Customer</a>
+

@@ -7,11 +7,11 @@ namespace Brickwell.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
+        private IBrickwellRepository _repo;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(IBrickwellRepository temp)
         {
-            _logger = logger;
+            _repo = temp;
         }
 
         public IActionResult Index()
@@ -105,9 +105,11 @@ namespace Brickwell.Controllers
         [HttpGet]
         public IActionResult OrderReview()
         {
-            // send the order review page
+            // send the order review notification page to the customer
             return View();
         }
+
+        //From here on it should be mostly Admin actions
 
         [HttpGet]
         public IActionResult AdminPage()
@@ -119,8 +121,30 @@ namespace Brickwell.Controllers
         [HttpGet]
         public IActionResult ListOrders()
         {
+            // grabs all the orders that are considered fraud and puts them in order of most recent to oldest.
+            var orderList = _repo.Orders
+                .Where(order => order.fraud == 1)
+                .OrderByDescending(order => order.date);
+
+
             // send the list orders page which is only accessible by the admin to see all the orders
-            return View();
+            return View(orderList);
+        }
+
+        [HttpGet]
+        public IActionResult ListProducts()
+        {
+            var productList = _repo.Products;
+            // send the list products page which is only accessible by the admin to see all the products
+            return View(productList);
+        }
+
+        [HttpGet]
+        public IActionResult ListCustomers()
+        {
+            var customerList = _repo.Customers;
+            // send the list customers page which is only accessible by the admin to see all the customers
+            return View(customerList);
         }
 
         [HttpGet]
