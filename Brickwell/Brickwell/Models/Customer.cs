@@ -6,6 +6,9 @@ namespace Brickwell.Models
     {
         [Key]
         public required int customer_ID { get; set; }
+
+        // This is a foreign key tht hasn't been implimeneted to connect with our login/ authorization system
+        public required string username { get; set; }
         public required string first_name { get; set; }
         public required string last_name { get; set; }
         public required DateOnly birth_date { get; set; }
