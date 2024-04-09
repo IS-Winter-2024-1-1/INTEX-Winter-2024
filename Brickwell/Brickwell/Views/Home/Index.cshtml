@@ -2,7 +2,40 @@
     ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div style="display: flex; align-items: center;">
+    <span style="margin-right: auto;">
+        <h3>Happy Bricking</h3>
+        <h1>Brickwell Inc.</h1>
+        <button>Explore Sets</button>
+    </span>
+    <img src="img/indeximg2.png" height="1500" style="margin-left: auto;" alt="legocastle" width="2000">
 </div>
+
+<div>
+    <h3>Hot Items</h3>
+    <p>Discover the latest must-have LEGO sets and exclusive releases</p>
+    <div>
+        @* Product Cards for the top three suggested products for the user (or general audience if not signed in) *@
+        @* @foreach (Product p in Model.Product) *@
+        @* { *@
+        @*     <partial name="ProductCard" model="p"/> *@
+        @* } *@
+    </div>
+</div>
+
+<div class="rectangle">
+    <h4>Get up to</h4>
+    <h2>25% off</h2>
+    <h4>Two or more sets</h4>
+    <button>Order Now</button>
+</div>
+<div>
+    <h3>What our customers say</h3>
+    <div class="rectangle">
+        <h5>Brickwell delivered a seamless experience. Ordering the Spider Tank set was effortless, and delivery was swift. 
+            The package arrived in perfect condition. Highly recommended for LEGO aficionados.</h5>
+        <h6>Creed G.</h6>
+        <p>Creator of HomeFax</p>
+    </div>
+</div>
+
