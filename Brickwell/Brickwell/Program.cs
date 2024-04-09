@@ -67,6 +67,15 @@ builder.Services.Configure<CookiePolicyOptions>(options =>
 
 });
 
+builder.Services.AddHsts(options => 
+{
+    options.Preload = true;
+    options.IncludeSubDomains = true;
+    options.MaxAge = TimeSpan.FromDays(60);
+    // options.ExcludedHosts.Add("example.com");
+    // options.ExcludedHosts.Add("www.example.com");
+});
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
