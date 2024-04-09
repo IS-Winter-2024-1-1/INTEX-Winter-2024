@@ -39,5 +39,40 @@ namespace Brickwell.Models
             _context.SaveChanges();
         }
 
+        public void AddCustomer(Customer Customer)
+        {
+            _context.Add(Customer);
+            _context.SaveChanges();
+        }
+
+        public void RemoveCustomer(Customer Customer)
+        {
+            _context.Remove(Customer);
+            _context.SaveChanges();
+        }
+
+        public void UpdateCustomer(Customer Customer)
+        {
+            _context.Update(Customer);
+            _context.SaveChanges();
+        }
+
+        public void AddRecommendation(Recommendation Recommendation)
+        {
+            _context.Add(Recommendation);
+            _context.SaveChanges();
+        }
+
+        public void RemoveRecommendation(Recommendation Recommendation)
+        {
+            _context.Remove(Recommendation);
+            _context.SaveChanges();
+        }
+
+        public void UpdateRecommendation(Recommendation Recommendation)
+        {
+            _context.Update(Recommendation);
+            _context.SaveChanges();
+        }
     }
 }
