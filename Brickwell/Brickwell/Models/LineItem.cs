@@ -1,9 +1,13 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using Microsoft.EntityFrameworkCore;
+using Mono.TextTemplating;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Brickwell.Models
 {
+    [PrimaryKey(nameof(transaction_ID), nameof(product_ID))]
     public class LineItem
     {
+
         [ForeignKey("Order")]
         public required int transaction_ID { get; set; }
         public required Order Order { get; set; }
