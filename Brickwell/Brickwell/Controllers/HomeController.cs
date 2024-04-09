@@ -126,7 +126,6 @@ namespace Brickwell.Controllers
                 .Where(order => order.fraud == 1)
                 .OrderByDescending(order => order.date);
 
-
             // send the list orders page which is only accessible by the admin to see all the orders
             return View(orderList);
         }
@@ -140,38 +139,25 @@ namespace Brickwell.Controllers
         }
 
         [HttpGet]
-        public IActionResult ListCustomers()
+        public IActionResult EditProduct(int id)
         {
-            var customerList = _repo.Customers;
-            // send the list customers page which is only accessible by the admin to see all the customers
-            return View(customerList);
-        }
-
-        [HttpGet]
-        public IActionResult EditOrder()
-        {
-            // send the edit order page which is only accessible by the admin
-            return View();
-        }
-
-        [HttpPost]
-        public IActionResult EditOrder(string x)
-        {
-            // Edits the order from the Admins changes and then redirects back to the AdminPage
-            return View();
-        }
-
-        [HttpGet]
-        public IActionResult EditProduct()
-        {
+            Product product = _repo.Products.FirstOrDefault(p => p.product_ID == id);
             // send the edit product page which is only accessible by the admin
-            return View();
+            return View(product);
         }
         [HttpPost]
         public IActionResult EditProduct(string x)
         {
             // Edits the product from the Admins changes and then redirects back to the AdminPage
             return View();
+        }
+
+        [HttpGet]
+        public IActionResult ListCustomers()
+        {
+            var customerList = _repo.Customers.OrderByDescending(customer => customer.last_name);
+            // send the list customers page which is only accessible by the admin to see all the customers
+            return View(customerList);
         }
 
         [HttpGet]
@@ -192,13 +178,6 @@ namespace Brickwell.Controllers
         public IActionResult AddProduct()
         {
             // Adds the product from the Admins changes and then redirects back to the AdminPage
-            return View();
-        }
-
-        [HttpPost]
-        public IActionResult DeleteOrder()
-        {
-            // Deletes the Order from the Admins changes and then redirects back to the AdminPage
             return View();
         }
 
