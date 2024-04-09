@@ -2,40 +2,113 @@
     ViewData["Title"] = "Home Page";
 }
 
-<div style="display: flex; align-items: center;">
-    <span style="margin-right: auto;">
-        <h3>Happy Bricking</h3>
-        <h1>Brickwell Inc.</h1>
-        <button>Explore Sets</button>
-    </span>
-    <img src="img/indeximg2.png" height="1500" style="margin-left: auto;" alt="legocastle" width="2000">
-</div>
-
-<div>
-    <h3>Hot Items</h3>
-    <p>Discover the latest must-have LEGO sets and exclusive releases</p>
-    <div>
-        @* Product Cards for the top three suggested products for the user (or general audience if not signed in) *@
-        @* @foreach (Product p in Model.Product) *@
-        @* { *@
-        @*     <partial name="ProductCard" model="p"/> *@
-        @* } *@
+<!-- Mashead header-->
+<header class="masthead gradient-bg">
+    <div class="container px-5">
+        <div class="row gx-5 align-items-center">
+            <div class="col-lg-6">
+                <!-- Mashead text and app badges-->
+                <div class="mb-5 mb-lg-0 text-center text-lg-start">
+                    <h1 class="display-1 lh-1 mb-3 text-white">BRICKWELL INC.</h1>
+                    <p class="lead fw-normal text-muted mb-5 text-white">HAPPY BRICKING</p>
+                    <div class="d-flex flex-column flex-lg-row align-items-center">
+                         <a class="btn btn-outline-light py-3 px-4 rounded-pill">Explore Sets!</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <!-- Masthead device mockup feature-->
+                <img src="img/NEW SETS! (750 x 750 px).png" alt="lego image"/>
+            </div>
+        </div>
     </div>
-</div>
-
-<div class="rectangle">
-    <h4>Get up to</h4>
-    <h2>25% off</h2>
-    <h4>Two or more sets</h4>
-    <button>Order Now</button>
-</div>
-<div>
-    <h3>What our customers say</h3>
-    <div class="rectangle">
-        <h5>Brickwell delivered a seamless experience. Ordering the Spider Tank set was effortless, and delivery was swift. 
-            The package arrived in perfect condition. Highly recommended for LEGO aficionados.</h5>
-        <h6>Creed G.</h6>
-        <p>Creator of HomeFax</p>
+</header>
+<!-- Quote/testimonial aside-->
+<aside class="text-center bg-gradient-primary-to-secondary">
+    <div class="container px-5">
+        <div class="row gx-5 justify-content-center">
+            <div class="col-xl-8">
+                <div class="h2 fs-1 text-white mb-4">"Brickwell delivered a seamless experience. Ordering the Spider Tank set was effortless, and delivery was swift. 
+                    The package arrived in perfect condition. Highly recommended for LEGO aficionados."</div>
+                <p>Creed G.</p>
+            </div>
+        </div>
     </div>
-</div>
+</aside>
+      <section class="cta">
+            <div class="cta-content">
+                <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
+                    <div class="col mb-5">
+                        <div class="card h-100">
+                            <!-- Product image-->
+                            <img class="card-img-top" src="https://dummyimage.com/450x300/dee2e6/6c757d.jpg" alt="..." />
+                            <!-- Product details-->
+                            <div class="card-body p-4">
+                                <div class="text-center">
+                                    <!-- Product name-->
+                                    <h5 class="fw-bolder">Fancy Product</h5>
+                                    <!-- Product price-->
+                                    $300.00
+                                </div>
+                            </div>
+                            <!-- Product actions-->
+                            <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
+                                <div class="text-center"><a class="btn btn-outline-dark mt-auto" href="#">View options</a></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col mb-5">
+                        <div class="card h-100">
+                            <!-- Product image-->
+                            <img class="card-img-top" src="https://dummyimage.com/450x300/dee2e6/6c757d.jpg" alt="..." />
+                            <!-- Product details-->
+                            <div class="card-body p-4">
+                                <div class="text-center">
+                                    <!-- Product name-->
+                                    <h5 class="fw-bolder">Special Item</h5>
+                                    <!-- Product reviews-->
+                                    <div class="d-flex justify-content-center small text-warning mb-2">
+                                        <div class="bi-star-fill"></div>
+                                        <div class="bi-star-fill"></div>
+                                        <div class="bi-star-fill"></div>
+                                        <div class="bi-star-fill"></div>
+                                        <div class="bi-star-fill"></div>
+                                    </div>
+                                    <!-- Product price-->
+                                    $40.00
+                                </div>
+                            </div>
+                            <!-- Product actions-->
+                            <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
+                                <div class="text-center"><a class="btn btn-outline-dark mt-auto" href="#">Add to cart</a></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col mb-5">
+                        <div class="card h-100">
+                            <!-- Product image-->
+                            <img class="card-img-top" src="https://dummyimage.com/450x300/dee2e6/6c757d.jpg" alt="..." />
+                            <!-- Product details-->
+                            <div class="card-body p-4">
+                                <div class="text-center">
+                                    <!-- Product name-->
+                                    <h5 class="fw-bolder">Sale Item</h5>
+                                    <!-- Product price-->
+                                    $25.00
+                                </div>
+                            </div>
+                            <!-- Product actions-->
+                            <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
+                                <div class="text-center"><a class="btn btn-outline-dark mt-auto" href="#">Add to cart</a></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+
+
+
 
