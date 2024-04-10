@@ -32,7 +32,8 @@ namespace Brickwell.Controllers
 
         public IActionResult Index()
         {
-            return View();
+            var userRecProducts = _repo.Products;
+            return View(userRecProducts);
         }
 
         public IActionResult About()
@@ -86,15 +87,17 @@ namespace Brickwell.Controllers
         [HttpGet]
         public IActionResult Products()
         {
+            var productData = _repo.Products;
             // send the product listings page
-            return View();
+            return View(productData);
         }
 
         [HttpGet]
-        public IActionResult ProductDetails()
+        public IActionResult ProductDetails(int id)
         {
-            // send the product details page in accordance with the item id
-            return View();
+            var productDetailed = _repo.Products
+                .Where(x => x.product_ID == id);
+            return View(productDetailed);
         }
 
         [HttpPost]
