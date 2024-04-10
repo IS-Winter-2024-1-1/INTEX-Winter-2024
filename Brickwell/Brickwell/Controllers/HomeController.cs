@@ -7,11 +7,11 @@ namespace Brickwell.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
+        private IBrickwellRepository _repo;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(IBrickwellRepository temp)
         {
-            _logger = logger;
+            _repo = temp;
         }
 
         public IActionResult Index()
@@ -111,9 +111,11 @@ namespace Brickwell.Controllers
         [HttpGet]
         public IActionResult OrderReview()
         {
-            // send the order review page
+            // send the order review notification page to the customer
             return View();
         }
+
+        //From here on it should be mostly Admin actions
 
         [HttpGet]
         public IActionResult AdminPage()
@@ -122,72 +124,83 @@ namespace Brickwell.Controllers
             return View();
         }
 
+        // List Fraud Orders for Admin
         [HttpGet]
         public IActionResult ListOrders()
         {
+            // grabs all the orders that are considered fraud and puts them in order of most recent to oldest.
+            var orderList = _repo.Orders
+                .Where(order => order.fraud == 1)
+                .OrderByDescending(order => order.date);
+
             // send the list orders page which is only accessible by the admin to see all the orders
-            return View();
+            return View(orderList);
         }
 
+        // List all Products for Admin
         [HttpGet]
-        public IActionResult EditOrder()
+        public IActionResult ListProducts()
         {
-            // send the edit order page which is only accessible by the admin
-            return View();
+            var productList = _repo.Products.OrderByDescending(product => product.name);
+            // send the list products page which is only accessible by the admin to see all the products
+            return View(productList);
         }
 
-        [HttpPost]
-        public IActionResult EditOrder(string x)
-        {
-            // Edits the order from the Admins changes and then redirects back to the AdminPage
-            return View();
-        }
-
+        // Edit Product for Admin
         [HttpGet]
-        public IActionResult EditProduct()
+        public IActionResult EditProduct(int id)
         {
+            Product product = _repo.Products.FirstOrDefault(p => p.product_ID == id);
             // send the edit product page which is only accessible by the admin
-            return View();
+            return View(product);
         }
+
+        // Update Product for Admin
         [HttpPost]
-        public IActionResult EditProduct(string x)
+        public IActionResult EditProduct(Product product)
         {
+            _repo.UpdateProduct(product);
             // Edits the product from the Admins changes and then redirects back to the AdminPage
-            return View();
-        }
-
-        [HttpGet]
-        public IActionResult EditCustomer()
-        {
-            // send the edit customer page which is only accessible by the admin
-            return View();
-        }
-
-        [HttpPost]
-        public IActionResult EditCustomer(string x)
-        {
-            // Edits the customer from the Admins changes and then redirects back to the AdminPage
-            return View();
+            // Redirects to the Products List page
+            return RedirectToAction("ListProducts");
         }
 
         [HttpPost]
         public IActionResult AddProduct()
         {
-            // Adds the product from the Admins changes and then redirects back to the AdminPage
-            return View();
-        }
 
-        [HttpPost]
-        public IActionResult DeleteOrder()
-        {
-            // Deletes the Order from the Admins changes and then redirects back to the AdminPage
-            return View();
+            // Adds the product from the Admins changes and then redirects back to the AdminPage
+            return View("EditProduct");
         }
 
         [HttpPost]
         public IActionResult DeleteProduct()
         {
             // Deletes the Product from the Admins changes and then redirects back to the AdminPage
+            return View();
+        }
+
+        [HttpGet]
+        public IActionResult ListCustomers()
+        {
+            var customerList = _repo.Customers.OrderBy(customer => customer.last_name);
+            // send the list customers page which is only accessible by the admin to see all the customers
+            return View(customerList);
+        }
+
+        [HttpGet]
+        public IActionResult EditCustomer(int id)
+        {
+            Customer customer = _repo.Customers.FirstOrDefault(c => c.customer_ID == id);
+            // send the edit customer page which is only accessible by the admin
+            return View(customer);
+        }
+
+        [HttpPost]
+        public IActionResult EditCustomer(Customer customer)
+        {
+            _repo.UpdateCustomer(customer);
+            // Edits the customer from the Admins changes and then redirects back to the AdminPage
             return View();
         }
 
