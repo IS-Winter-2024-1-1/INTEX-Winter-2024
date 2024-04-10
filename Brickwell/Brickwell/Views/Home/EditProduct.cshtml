@@ -40,7 +40,14 @@
     <textarea required asp-for="description" id="description" name="description"></textarea><br>
 
     <label asp-for="category">Category:</label><br>
-    <input required asp-for="category" type="text" id="category" name="category"><br>
+    <select required asp-for="category" id="category" name="category">
+        <option value="">Select a category</option>
+        @foreach (var cat in ViewBag.categories)
+        {
+            <option value="@cat">@cat</option>
+        }
+    </select><br>
+
 
     <br>
     <input type="submit" value="Save" class="btn btn-primary">
