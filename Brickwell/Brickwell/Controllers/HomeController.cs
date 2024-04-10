@@ -200,12 +200,12 @@ namespace Brickwell.Controllers
             Console.WriteLine(things.First().date.GetType());
 
 
-            var oneMonthAgo = DateTime.Now.AddMonths(-1);
+            var oneMonthAgo = DateOnly.FromDateTime(DateTime.Now.AddMonths(-1));
 
             var stuff = new OrderListViewModel
             {
                 Orders = _repo.Orders
-                    .Where(order => order.fraud == 1 && DateTime.Parse(order.date) >= oneMonthAgo)  // Filter by fraud and date
+                    .Where(order => order.fraud == 1 && order.date >= oneMonthAgo)  // Filter by fraud and date
                     .OrderByDescending(order => order.date),
 
                 PaginationInfo = new PaginationInfo
