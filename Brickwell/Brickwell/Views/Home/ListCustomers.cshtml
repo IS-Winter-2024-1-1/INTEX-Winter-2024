@@ -24,8 +24,19 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach (var customer in Model.Customers)
+                @foreach (var customer in Model.Customers.ToList())
                 {
+                var userRole = Model.UserRoles.Where(x => x.User.UserName == customer.username).FirstOrDefault();
+                string role;
+
+                if (userRole != null)
+                {
+                    role = userRole.Role.Name;
+                }
+                else
+                {
+                    role = "Account Not Found";
+                }
                 <tr>
                     <td>@customer.last_name</td>
                     <td>@customer.first_name</td>
@@ -35,7 +46,7 @@
                     <td>@customer.country_of_residence</td>
                     <td>@customer.gender</td>
                     <td>@customer.age</td>
-                    <td>Their Role</td>
+                    <td>@role</td>
                     <td>
                         <a class="btn btn-primary" asp-controller="Home" asp-action="EditCustomer" asp-route-id="@customer.customer_ID">Edit</a>
                         <a class="btn btn-danger" asp-controller="Home" asp-action="DeleteCustomer" asp-route-id="@customer.customer_ID">Delete</a>
