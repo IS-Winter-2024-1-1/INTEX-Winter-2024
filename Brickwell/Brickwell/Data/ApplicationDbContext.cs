@@ -52,6 +52,6 @@ namespace Brickwell.Data
 
         public DbSet<LineItem> LineItems { get; set; }
 
-        public DbSet<Recommendation> Recommendations { get; set; }
+        public DbSet<ProductRecommendation> Recommendations { get; set; }
     }
 }

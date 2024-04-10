@@ -10,7 +10,7 @@ namespace Brickwell.Models
         [ForeignKey("Customer")]
         public required int customer_ID { get; set; }
         public required Customer Customer { get; set; }
-        public required string date { get; set; }
+        public required DateOnly date { get; set; }
         public required string day_of_week { get; set; }
         public required int time { get; set; }
         public required string entry_mode { get; set; }
