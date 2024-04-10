@@ -4,14 +4,10 @@
 
 
 <div>
-    <h3>Products</h3>
-    <div>
-        @* Product Cards from partial view *@
-        @* @foreach (Product p in Model.Product) *@
-        @* { *@
-        @*     <partial name="ProductCard" model="p"/> *@
-        @* } *@
-    </div>
+    @foreach (Product p in Model.Product)
+    { 
+        <partial name="ProductCard" model="p"/>
+    }
 </div>
 
 

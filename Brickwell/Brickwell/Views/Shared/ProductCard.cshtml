@@ -1,9 +1,22 @@
-@* @model TModel *@
 
-<div class="card m-1 p-1">
-    <img/>
-        <span class="badge rounded-bottom bg-dark text-white float-end"><small>CART IMG</small></span>
-    <h4>Model.Name</h4>
-    <h6>Model.Price</h6>
-    @* <img/> ARROW IMG *@
-</div> 
+@model Product
+
+<div class="col mb-5">
+    <div class="card h-100">
+        <!-- Product image-->
+        <img class="card-img-top" src="@Model.img_link" alt="..."/>
+        <!-- Product details-->
+        <div class="card-body p-4">
+            <div class="text-center">
+                <!-- Product name-->
+                <h5 class="fw-bolder">@Model.name</h5>
+                <!-- Product price-->
+                @Model.price
+            </div>
+        </div>
+        <!-- Product actions-->
+        <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
+            <div class="text-center"><a class="btn btn-outline-dark mt-auto" asp-controller="Home" asp-action="">View Options</a></div>
+        </div>
+    </div>
+</div>
