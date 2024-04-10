@@ -2,13 +2,50 @@
     ViewData["Title"] = "Home Page";
 }
 
-@model IQueryable<Product>
+@model ProductsViewModel
 
 <div class="row gx-4 gx-lg-5 row-cols-1 row-cols-md-2 row-cols-xl-3 justify-content-center">
-    @foreach (var product in Model)
+    @foreach (var product in Model.Products)
     { 
         <partial name="ProductCard" model="product"/>
     }
 </div>
 
-
+<div page-model="@Model.PaginationInfo" page-action="Products">
+    <nav aria-label="Page navigation">
+        <ul class="pagination justify-content-center">
+            @{
+                int totalPages = Model.PaginationInfo.TotalPages;
+                int currentPage = Model.PaginationInfo.CurrentPage;
+                int maxVisiblePages = 5; // Adjust this value to change the maximum number of visible page links
+                int startPage = Math.Max(1, currentPage - maxVisiblePages / 2);
+                int endPage = Math.Min(startPage + maxVisiblePages - 1, totalPages);
+                startPage = Math.Max(1, endPage - maxVisiblePages + 1);
+            }
+            @if (startPage > 1)
+            {
+                <li class="page-item">
+                    <a class="page-link" href="#" onclick="gotoPage(1)">1</a>
+                </li>
+                <li class="page-item disabled">
+                    <span class="page-link">...</span>
+                </li>
+            }
+            @for (int i = startPage; i <= endPage; i++)
+            {
+                <li class="page-item @(i == currentPage ? "active" : "")">
+                    <a class="page-link" href="#" onclick="gotoPage(@i)">@i</a>
+                </li>
+            }
+            @if (endPage < totalPages)
+            {
+                <li class="page-item disabled">
+                    <span class="page-link">...</span>
+                </li>
+                <li class="page-item">
+                    <a class="page-link" href="#" onclick="gotoPage(@totalPages)">@totalPages</a>
+                </li>
+            }
+        </ul>
+    </nav>
+</div>
