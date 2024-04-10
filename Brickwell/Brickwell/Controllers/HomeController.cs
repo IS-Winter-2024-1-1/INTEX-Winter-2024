@@ -85,18 +85,42 @@ namespace Brickwell.Controllers
         }
 
         [HttpGet]
-        public IActionResult Products()
+        public IActionResult Products(int pageNum)
         {
-            var productData = _repo.Products;
-            // send the product listings page
-            return View(productData);
+            {
+                int pageSize = 9;
+
+                var skipAmount = pageSize * (pageNum - 1);
+                if (skipAmount < 0)
+                {
+                    skipAmount = 0;
+                }
+
+                var stuff = new ProductsViewModel()
+                {
+                    Products = _repo.Products
+                        .OrderBy(x => x.name)
+                        .Skip(skipAmount)
+                        .Take(pageSize),
+
+                    PaginationInfo = new PaginationInfo
+                    {
+                        CurrentPage = pageNum,
+                        ItemsPerPage = pageSize,
+                        TotalItems = _repo.Products.Count()
+                    }
+                };
+                return View(stuff);
+            }
         }
 
         [HttpGet]
         public IActionResult ProductDetails(int id)
         {
-            var productDetailed = _repo.Products
-                .Where(x => x.product_ID == id);
+            var productDetailed = new ProductDetailsViewModel()
+            {
+                Product = _repo.Products.FirstOrDefault(p => p.product_ID == id)
+            };
             return View(productDetailed);
         }
 
