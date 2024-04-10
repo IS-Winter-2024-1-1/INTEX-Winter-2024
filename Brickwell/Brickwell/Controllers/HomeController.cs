@@ -165,12 +165,19 @@ namespace Brickwell.Controllers
             return RedirectToAction("ListProducts");
         }
 
-        [HttpPost]
+        [HttpGet]
         public IActionResult AddProduct()
         {
-
-            // Adds the product from the Admins changes and then redirects back to the AdminPage
+            // send the add product page which is only accessible by the admin
             return View("EditProduct");
+        }
+
+        [HttpPost]
+        public IActionResult AddProduct(Product newProduct)
+        {
+            _repo.AddProduct(newProduct);
+            // Adds the product from the Admins changes and then redirects back to the AdminPage
+            return View("ListProduct");
         }
 
         [HttpPost]
