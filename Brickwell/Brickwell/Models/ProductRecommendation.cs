@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Brickwell.Models
 {
-    public class Recommendation
+    public class ProductRecommendation
     {
         [Key]
         [ForeignKey("Product")]
