@@ -115,7 +115,9 @@ app.UseCookiePolicy();
 app.UseRouting();
 
 app.UseAuthorization();
-
+// app.MapControllerRoute("pagenumandtype", "{projectType}/{pageNum}", new { Controller = "Home", action = "Products" });
+// app.MapControllerRoute("projectType", "{productType}", new { Controller = "Home", action = "Products", pageNum = 1 });
+// app.MapControllerRoute("pagination", "{pageNum}", new {Controller = "Home", action = "Products", pageNum = 1});
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");

@@ -9,6 +9,10 @@
         <h5>Filter by Category:</h5>
         <vc:product-types/>
     </div>
+        <div>
+            <h5>Filter by Color:</h5>
+            <vc:product-colors/>
+        </div>
     @foreach (var product in Model.Products)
     {
         <partial name="ProductCard" model="product"/>
