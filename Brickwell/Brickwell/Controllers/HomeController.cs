@@ -263,7 +263,7 @@ namespace Brickwell.Controllers
         [HttpGet]
         public IActionResult ListCustomers(int pageNum)
         {
-            int pageSize = 15;
+            int pageSize = 30;
 
             var skipAmount = pageSize * (pageNum - 1);
             if (skipAmount < 0)

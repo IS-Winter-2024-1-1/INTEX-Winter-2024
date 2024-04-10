@@ -1,0 +1,39 @@
+
+
+@model Customer
+
+<div class="col mb-5">
+    <div class="card h-100">
+        <!-- Customer details-->
+        <div class="card-body p-4">
+            <div class="text-center">
+                <!-- Customer name-->
+                <h5 class="fw-bolder">@Model.last_name, @Model.first_name</h5>
+                <!-- Customer ID-->
+                <strong>Customer ID:</strong> @Model.customer_ID
+                <!-- Email-->
+                <strong>Username/email:</strong> @Model.username
+                <!-- Birth Day-->
+                <strong>Birth Day:</strong> @Model.birth_date
+                <!-- Country-->
+                <strong>Country:</strong> @Model.country_of_residence
+                <!-- Gender-->
+                <strong>Gender:</strong> @Model.gender
+                <!-- Age-->
+                <strong>Age:</strong> @Model.age
+                <!-- Current Role-->
+                <strong>Current Role:</strong> Their Role
+            </div>
+        </div>
+        <!-- Customer actions-->
+        <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
+            <div class="text-center">
+                <a class="btn btn-info" asp-controller="Home" asp-action="EditCustomer" asp-route-id="@Model.customer_ID">Edit</a>
+                <form asp-controller="Home" asp-action="DeleteCustomer" method="post" style="display:inline;">
+                    <input type="hidden" name="customer_ID" value="@Model.customer_ID" />
+                    <button type="submit" class="btn btn-danger">Delete</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
