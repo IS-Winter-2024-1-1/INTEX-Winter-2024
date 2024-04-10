@@ -205,14 +205,16 @@ namespace Brickwell.Controllers
             var stuff = new OrderListViewModel
             {
                 Orders = _repo.Orders
-                    .Where(order => order.fraud == 1 && order.date >= oneMonthAgo)  // Filter by fraud and date
+                    .Where(order => order.fraud == 1 && order.date >= oneMonthAgo)  // Filter by fraud and date from the last Month
                     .OrderByDescending(order => order.date),
 
                 PaginationInfo = new PaginationInfo
                 {
                     CurrentPage = pageNum,
                     ItemsPerPage = pageSize,
-                    TotalItems = _repo.Orders.Count()
+                    TotalItems = _repo.Orders
+                    .Where(order => order.fraud == 1 && order.date >= oneMonthAgo)  // Filter by fraud and date
+                    .OrderByDescending(order => order.date).Count()
                 }
             };
 
