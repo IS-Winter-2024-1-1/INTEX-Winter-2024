@@ -61,10 +61,11 @@ namespace Brickwell.Controllers
         }
 
         [HttpGet]
-        public IActionResult ProductDetails()
+        public IActionResult ProductDetails(int id)
         {
-            // send the product details page in accordance with the item id
-            return View();
+            var productDetailed = _repo.Products
+                .Where(x => x.product_ID == id);
+            return View(productDetailed);
         }
 
         [HttpPost]
