@@ -285,7 +285,7 @@ namespace Brickwell.Controllers
         }
 
         [HttpGet]
-        public IActionResult ListCustomers(int pageNum)
+        public async Task<IActionResult> ListCustomers(int pageNum)
         {
             int pageSize = 30;
 
@@ -294,6 +294,14 @@ namespace Brickwell.Controllers
             {
                 skipAmount = 0;
             }
+
+            //get current user  
+            var currentuser = await _usermanager.FindByNameAsync(User.Identity.Name);
+            //query the userrole table  
+            //required using Microsoft.EntityFrameworkCore;  
+            var userrole = _dbcontext.ApplicationUserRoles.Include(c => c.User).Include(c => c.Role).Where(c => c.UserId == currentuser.Id).FirstOrDefault();
+            var role = userrole.Role;
+
 
             var stuff = new CustomerListViewModel
             {
@@ -307,7 +315,10 @@ namespace Brickwell.Controllers
                     CurrentPage = pageNum,
                     ItemsPerPage = pageSize,
                     TotalItems = _repo.Customers.Count()
-                }
+                },
+
+
+                Role = role
             };
            
             // send the list customers page which is only accessible by the admin to see all the customers
