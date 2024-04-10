@@ -177,7 +177,7 @@ namespace Brickwell.Controllers
         [HttpGet]
         public IActionResult ListCustomers()
         {
-            var customerList = _repo.Customers.OrderByDescending(customer => customer.last_name);
+            var customerList = _repo.Customers.OrderBy(customer => customer.last_name);
             // send the list customers page which is only accessible by the admin to see all the customers
             return View(customerList);
         }
