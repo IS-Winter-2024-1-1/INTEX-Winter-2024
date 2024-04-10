@@ -85,7 +85,7 @@ namespace Brickwell.Controllers
         }
 
         [HttpGet]
-        public IActionResult Products(int pageNum, string? productType)
+        public IActionResult Products(int pageNum, string? productType, string? productColor)
         {
             {
                 int pageSize = 9;
@@ -99,7 +99,7 @@ namespace Brickwell.Controllers
                 var stuff = new ProductsViewModel()
                 {
                     Products = _repo.Products
-                        .Where(x => x.category == productType || productType == null)
+                        .Where(x => (x.category == productType || productType == null) && (x.primary_color == productColor || productColor == null))
                         .OrderBy(x => x.name)
                         .Skip(skipAmount)
                         .Take(pageSize),
