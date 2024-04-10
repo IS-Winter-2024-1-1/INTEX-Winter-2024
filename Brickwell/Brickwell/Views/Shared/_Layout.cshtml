@@ -7,29 +7,31 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/Brickwell.styles.css" asp-append-version="true" />
+    <link href="css/styles.css" rel="stylesheet" />
+    <link href="css/cardstyles.css" rel="stylesheet" />
 </head>
-<body class="Home" style="width: 100%; height: 100%; position: relative; background: linear-gradient(204deg, #86BBD8 32%, #5279AD 68%); border-radius: 14px; overflow: hidden">
+<body class="gradient-bg">
     <header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm mb-3">
             <div class="container-fluid">
-                <img src="img/navlogo.png" height="100"/>
+                <img src="img/navlogo2.png" height="100"/>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
+                    <ul class="navbar-nav flex-grow-1 mx-auto">
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                            <a class="nav-link text-white text-center" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Products</a>
+                            <a class="nav-link text-white text-center" asp-area="" asp-controller="Home" asp-action="Privacy">Products</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">About Us</a>
+                            <a class="nav-link text-white text-center" asp-area="" asp-controller="Home" asp-action="Privacy">About Us</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Cart</a>
+                            <a class="nav-link text-white text-center" asp-area="" asp-controller="Home" asp-action="Privacy">Cart</a>
                         </li>
                     </ul>
                     <partial name="_LoginPartial" />
@@ -43,15 +45,19 @@
             @RenderBody()
         </main>
     </div>
-
-    <footer class="Rectangle17" style="width: 100%; height: 100%; background: white">
-        <div class="container">
-            &copy; 2024 - Brickwell - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+<footer class="bg-orange text-center py-5">
+    <div class="container px-5">
+        <div class="text-white-50 small">
+            <div class="mb-2">&copy; Brickwell Inc. 2023. All Rights Reserved.</div>
+            <div>Contact us: happybricking@gmail.com | Phone: +123456789</div>
+            <a href="#!">Privacy</a>
         </div>
-    </footer>
+    </div>
+</footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="js/scripts.js"></script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>
