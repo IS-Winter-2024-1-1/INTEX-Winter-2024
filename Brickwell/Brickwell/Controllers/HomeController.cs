@@ -1,4 +1,5 @@
 using Brickwell.Models;
+using Brickwell.Models.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
@@ -170,7 +171,7 @@ namespace Brickwell.Controllers
             _repo.UpdateProduct(product);
             // Edits the product from the Admins changes and then redirects back to the AdminPage
             // Redirects to the Products List page
-            return RedirectToAction("ListProducts");
+            return RedirectToAction("ChangesConfirmation");
         }
 
         [HttpGet]
@@ -193,7 +194,7 @@ namespace Brickwell.Controllers
         {
             _repo.AddProduct(newProduct);
             // Adds the product from the Admins changes and then redirects back to the AdminPage
-            return View("ListProduct");
+            return View("ChangesConfirmation");
         }
 
         [HttpPost]
@@ -201,7 +202,7 @@ namespace Brickwell.Controllers
         {
             _repo.RemoveProduct(product);
             // Deletes the Product from the Admins changes and then redirects back to the AdminPage
-            return View();
+            return View("ChangesConfirmation");
         }
 
         [HttpGet]
@@ -209,10 +210,23 @@ namespace Brickwell.Controllers
         {
             int pageSize = 15;
 
-            
-            var customerList = _repo.Customers.OrderBy(customer => customer.last_name);
+            var stuff = new CustomerListViewModel
+            {
+                Customers = _repo.Customers
+                .OrderBy(x => x.last_name)
+                .Skip(pageSize * (pageNum - 1))
+                .Take(pageSize),
+
+                PaginationInfo = new PaginationInfo
+                {
+                    CurrentPage = pageNum,
+                    ItemsPerPage = pageSize,
+                    TotalItems = _repo.Customers.Count()
+                }
+            };
+           
             // send the list customers page which is only accessible by the admin to see all the customers
-            return View(customerList);
+            return View(stuff);
         }
 
         [HttpGet]
@@ -228,7 +242,7 @@ namespace Brickwell.Controllers
         {
             _repo.UpdateCustomer(customer);
             // Edits the customer from the Admins changes and then redirects back to the AdminPage
-            return View();
+            return View("ChangesConfirmation");
         }
 
         [HttpPost]
@@ -236,7 +250,7 @@ namespace Brickwell.Controllers
         {
             _repo.RemoveCustomer(customer);
             // Deletes the Customer from the Admins changes and then redirects back to the AdminPage
-            return View();
+            return View("ChangesConfirmation");
         }
 
         [HttpPost]
@@ -244,7 +258,7 @@ namespace Brickwell.Controllers
         {
             _repo.AddCustomer(customer);
             // Adds the Customer from the Admins changes and then redirects back to the AdminPage
-            return View();
+            return View("ChangesConfirmation");
         }
 
 
