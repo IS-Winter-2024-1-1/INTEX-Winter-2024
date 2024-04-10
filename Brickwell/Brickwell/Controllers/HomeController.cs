@@ -1,4 +1,5 @@
 using Brickwell.Models;
+using Brickwell.Models.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
@@ -209,10 +210,23 @@ namespace Brickwell.Controllers
         {
             int pageSize = 15;
 
-            
-            var customerList = _repo.Customers.OrderBy(customer => customer.last_name);
+            var stuff = new CustomerListViewModel
+            {
+                Customers = _repo.Customers
+                .OrderBy(x => x.last_name)
+                .Skip(pageSize * (pageNum - 1))
+                .Take(pageSize),
+
+                PaginationInfo = new PaginationInfo
+                {
+                    CurrentPage = pageNum,
+                    ItemsPerPage = pageSize,
+                    TotalItems = _repo.Customers.Count()
+                }
+            };
+           
             // send the list customers page which is only accessible by the admin to see all the customers
-            return View(customerList);
+            return View(stuff);
         }
 
         [HttpGet]
