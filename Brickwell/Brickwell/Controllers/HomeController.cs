@@ -85,7 +85,7 @@ namespace Brickwell.Controllers
         }
 
         [HttpGet]
-        public IActionResult Products(int pageNum)
+        public IActionResult Products(int pageNum, string productType)
         {
             {
                 int pageSize = 9;
