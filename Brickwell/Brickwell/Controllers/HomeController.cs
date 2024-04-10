@@ -1,7 +1,11 @@
+using Brickwell.Data;
 using Brickwell.Models;
 using Brickwell.Models.ViewModels;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using System.Diagnostics;
 
 namespace Brickwell.Controllers
@@ -9,11 +13,22 @@ namespace Brickwell.Controllers
     public class HomeController : Controller
     {
         private IBrickwellRepository _repo;
+        private readonly ApplicationDbContext _dbcontext;
+        private readonly UserManager<ApplicationUser> _usermanager;
+        private readonly RoleManager<ApplicationRole> _roleManger;
 
-        public HomeController(IBrickwellRepository temp)
+        public HomeController(IBrickwellRepository temp,
+                                UserManager<ApplicationUser> userManager,
+                                RoleManager<ApplicationRole> roleManager,
+                                ApplicationDbContext applicationDbContext)
         {
             _repo = temp;
+            _dbcontext = applicationDbContext;
+            _usermanager = userManager;
+            _roleManger = roleManager;
         }
+
+
 
         public IActionResult Index()
         {
@@ -26,8 +41,24 @@ namespace Brickwell.Controllers
         }
 
         [Authorize(Roles = "Admin")]
-        public IActionResult Test()
+        public async Task<IActionResult> Test()
         {
+            if (User.Identity.IsAuthenticated)
+            {
+                //get current user  
+                var currentuser = await _usermanager.FindByNameAsync(User.Identity.Name);
+                //query the userrole table  
+                //required using Microsoft.EntityFrameworkCore;  
+                var userrole = _dbcontext.ApplicationUserRoles.Include(c => c.User).Include(c => c.Role).Where(c => c.UserId == currentuser.Id).FirstOrDefault();
+                var user = userrole.User;
+                var role = userrole.Role;
+
+                ViewBag.user = new { myUserRole = userrole, 
+                                     myUser = user,
+                                     myRole = role};
+
+            }
+
             return View();
         }
 
