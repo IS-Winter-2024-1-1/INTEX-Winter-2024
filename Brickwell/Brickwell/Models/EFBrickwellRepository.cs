@@ -19,7 +19,7 @@ namespace Brickwell.Models
 
         public IQueryable<LineItem> LineItems => _context.LineItems;
 
-        //public DbSet<Recommendation> Recommendations => _context.Recommendations;
+        public IQueryable<Recommendation> Recommendations => _context.Recommendations;
 
         public void AddProduct(Product Product)
         {

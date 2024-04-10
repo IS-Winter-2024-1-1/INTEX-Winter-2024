@@ -2,7 +2,64 @@
     ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+@model IQueryable<Product>
+
+<!-- Mashead header-->
+<header>
+    <div class="container px-5">
+        <div class="row gx-5 align-items-center">
+            <div class="col-lg-6">
+                <!-- Mashead text and app badges-->
+                <div class="mb-5 mb-lg-0 text-center text-lg-start">
+                    <img src="img/indexlogowhite4.png" height="200" width="600"/>
+                    <div class="d-flex flex-column flex-lg-row align-items-center">
+                        <a class="btn btn-outline-light py-3 px-4 rounded-pill">Explore Sets!</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <!-- Masthead device mockup feature-->
+                <img src="img/hopefullythefinal4.png" height= "600" width="600" alt="lego image"/>
+            </div>
+        </div>
+    </div>
+</header>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+<div>
+    <h3 class="align-items-center">Hot Picks</h3>
+    <h5>Discover the latest must-have LEGO sets and exclusive releases</h5>
+    <br/>
+    <br/>
+    <div class="row gx-4 gx-lg-5 row-cols-1 row-cols-md-2 row-cols-xl-3 justify-content-center">
+        @foreach (var product in Model)
+        { 
+            <div class="col mb-5">
+                <partial name="ProductCard" model="product"/>
+            </div>
+        }
+    </div>
 </div>
+
+<!-- Quote/testimonial aside-->
+<aside class="text-center bg-gradient-primary-to-secondary">
+    <div class="container px-5">
+        <div class="row gx-5 justify-content-center">
+            <div class="col-xl-8">
+                <div class="h3 fs-1 text-white mb-4">"Brickwell delivered a seamless experience. Ordering the Spider Tank set was effortless, and delivery was swift. 
+                    The package arrived in perfect condition. Highly recommended for LEGO aficionados."</div>
+                <h6>- Creed G.</h6>
+            </div>
+        </div>
+    </div>
+</aside>
+
+
+
+
+
+

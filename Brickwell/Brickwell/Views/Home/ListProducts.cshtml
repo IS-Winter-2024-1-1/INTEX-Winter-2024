@@ -1,0 +1,50 @@
+﻿@{
+    ViewData["Title"] = "Products Overview";
+}
+
+@model IQueryable<Product>
+
+<h1>@ViewData["Title"]</h1>
+
+<table>
+    <thead>
+        <tr>
+            <th>Product ID</th>
+            <th>Name</th>
+            <th>Year</th>
+            <th>Number of Parts</th>
+            <th>Price</th>
+            <th>Image Link</th>
+            <th>Primary Color</th>
+            <th>Secondary Color</th>
+            <th>Description</th>
+            <th>Category</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var product in Model)
+        {
+            <tr>
+                <td>@product.product_ID</td>
+                <td>@product.name</td>
+                <td>@product.year</td>
+                <td>@product.num_parts</td>
+                <td>@product.price</td>
+                <td>@product.img_link</td>
+                <td>@product.primary_color</td>
+                <td>@product.secondary_color</td>
+                <td>@product.description</td>
+                <td>@product.category</td>
+                <td>
+                    <a class="btn btn-info" asp-controller="Home" asp-action="EditProduct" asp-route-id="@product.product_ID">Edit</a>
+                    <form asp-controller="Home" asp-action="DeleteProduct" method="post" style="display:inline;">
+                        <input type="hidden" name="product_ID" value="@product.product_ID" />
+                        <button type="submit" class="btn btn-danger">Delete</button>
+                    </form>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+<a class="btn btn-primary" asp-controller="Home" asp-action="AddProduct">Add Product</a>

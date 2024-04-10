@@ -1,0 +1,52 @@
+﻿@{
+    ViewData["Title"] = "Customers Overview";
+}
+
+@model CustomerListViewModel
+
+<h1>@ViewData["Title"]</h1>
+
+<div class="customer-list">
+    @foreach (var customer in Model.Customers)
+    {
+        <div class="customer">
+            <div class="customer-property">
+                <strong>Customer ID:</strong> @customer.customer_ID
+            </div>
+            <div class="customer-property">
+                <strong>Username/email:</strong> @customer.username
+            </div>
+            <div class="customer-property">
+                <strong>Name:</strong> @customer.last_name, @customer.first_name
+            </div>
+            <div class="customer-property">
+                <strong>Birth Day:</strong> @customer.birth_date
+            </div>
+            <div class="customer-property">
+                <strong>Country:</strong> @customer.country_of_residence
+            </div>
+            <div class="customer-property">
+                <strong>Gender:</strong> @customer.gender
+            </div>
+            <div class="customer-property">
+                <strong>Age:</strong> @customer.age
+            </div>
+            <div class="customer-property">
+                <strong>Current Role:</strong> Their Role
+            </div>
+            <div class="customer-property">
+                <a class="btn btn-info" asp-controller="Home" asp-action="EditCustomer" asp-route-id="@customer.customer_ID">Edit</a>
+                <form asp-controller="Home" asp-action="DeleteCustomer" method="post" style="display:inline;">
+                    <input type="hidden" name="customer_ID" value="@customer.customer_ID" />
+                    <button type="submit" class="btn btn-danger">Delete</button>
+                </form>
+            </div>
+        </div>
+    }
+</div>
+
+
+<a class="btn btn-info" asp-controller="Home" asp-action="AddCustomer">Add New Customer</a>
+
+<div page-model="@Model.PaginationInfo" page-action="ListCustomers"></div>
+

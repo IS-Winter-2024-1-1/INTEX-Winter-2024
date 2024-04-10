@@ -1,26 +1,65 @@
+using Brickwell.Data;
 using Brickwell.Models;
+using Brickwell.Models.ViewModels;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using System.Diagnostics;
 
 namespace Brickwell.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
+        private IBrickwellRepository _repo;
+        private readonly ApplicationDbContext _dbcontext;
+        private readonly UserManager<ApplicationUser> _usermanager;
+        private readonly RoleManager<ApplicationRole> _roleManger;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(IBrickwellRepository temp,
+                                UserManager<ApplicationUser> userManager,
+                                RoleManager<ApplicationRole> roleManager,
+                                ApplicationDbContext applicationDbContext)
         {
-            _logger = logger;
+            _repo = temp;
+            _dbcontext = applicationDbContext;
+            _usermanager = userManager;
+            _roleManger = roleManager;
         }
+
+
 
         public IActionResult Index()
         {
-            return View();
+            var userRecProducts = _repo.Products;
+            return View(userRecProducts);
         }
 
         public IActionResult About()
         {
+            return View();
+        }
+
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> Test()
+        {
+            if (User.Identity.IsAuthenticated)
+            {
+                //get current user  
+                var currentuser = await _usermanager.FindByNameAsync(User.Identity.Name);
+                //query the userrole table  
+                //required using Microsoft.EntityFrameworkCore;  
+                var userrole = _dbcontext.ApplicationUserRoles.Include(c => c.User).Include(c => c.Role).Where(c => c.UserId == currentuser.Id).FirstOrDefault();
+                var user = userrole.User;
+                var role = userrole.Role;
+
+                ViewBag.user = new { myUserRole = userrole, 
+                                     myUser = user,
+                                     myRole = role};
+
+            }
+
             return View();
         }
 
@@ -46,17 +85,19 @@ namespace Brickwell.Controllers
         }
 
         [HttpGet]
-        public IActionResult ProductPage()
+        public IActionResult Products()
         {
+            var productData = _repo.Products;
             // send the product listings page
-            return View();
+            return View(productData);
         }
 
         [HttpGet]
-        public IActionResult ProductDetails()
+        public IActionResult ProductDetails(int id)
         {
-            // send the product details page in accordance with the item id
-            return View();
+            var productDetailed = _repo.Products
+                .Where(x => x.product_ID == id);
+            return View(productDetailed);
         }
 
         [HttpPost]
@@ -105,9 +146,11 @@ namespace Brickwell.Controllers
         [HttpGet]
         public IActionResult OrderReview()
         {
-            // send the order review page
+            // send the order review notification page to the customer
             return View();
         }
+
+        //From here on it should be mostly Admin actions
 
         [HttpGet]
         public IActionResult AdminPage()
@@ -116,87 +159,140 @@ namespace Brickwell.Controllers
             return View();
         }
 
+        // List Fraud Orders for Admin
         [HttpGet]
         public IActionResult ListOrders()
         {
+            // grabs all the orders that are considered fraud and puts them in order of most recent to oldest.
+            var orderList = _repo.Orders
+                .Where(order => order.fraud == 1)
+                .OrderByDescending(order => order.date);
+
             // send the list orders page which is only accessible by the admin to see all the orders
-            return View();
+            return View(orderList);
         }
 
+        // List all Products for Admin
         [HttpGet]
-        public IActionResult EditOrder()
+        public IActionResult ListProducts()
         {
-            // send the edit order page which is only accessible by the admin
-            return View();
+            var productList = _repo.Products.OrderByDescending(product => product.name);
+            // send the list products page which is only accessible by the admin to see all the products
+            return View(productList);
         }
 
-        [HttpPost]
-        public IActionResult EditOrder(string x)
-        {
-            // Edits the order from the Admins changes and then redirects back to the AdminPage
-            return View();
-        }
-
+        // Edit Product for Admin
         [HttpGet]
-        public IActionResult EditProduct()
+        public IActionResult EditProduct(int id)
         {
+            Product product = _repo.Products.FirstOrDefault(p => p.product_ID == id);
+
+            var uniqueCategories = _repo.Products
+                .Select(x => x.category)
+                .Distinct()
+                .OrderBy(x => x)
+                .ToList();
+
+            ViewBag.categories = uniqueCategories;
             // send the edit product page which is only accessible by the admin
-            return View();
+            return View(product);
         }
+
+        // Update Product for Admin
         [HttpPost]
-        public IActionResult EditProduct(string x)
+        public IActionResult EditProduct(Product product)
         {
+            _repo.UpdateProduct(product);
             // Edits the product from the Admins changes and then redirects back to the AdminPage
-            return View();
+            // Redirects to the Products List page
+            return RedirectToAction("ChangesConfirmation");
         }
 
         [HttpGet]
-        public IActionResult EditCustomer()
-        {
-            // send the edit customer page which is only accessible by the admin
-            return View();
-        }
-
-        [HttpPost]
-        public IActionResult EditCustomer(string x)
-        {
-            // Edits the customer from the Admins changes and then redirects back to the AdminPage
-            return View();
-        }
-
-        [HttpPost]
         public IActionResult AddProduct()
         {
+            var uniqueCategories = _repo.Products
+                .Select(x => x.category)
+                .Distinct()
+                .OrderBy(x => x)
+                .ToList();
+
+            ViewBag.categories = uniqueCategories;
+
+            // send the add product page which is only accessible by the admin
+            return View("EditProduct");
+        }
+
+        [HttpPost]
+        public IActionResult AddProduct(Product newProduct)
+        {
+            _repo.AddProduct(newProduct);
             // Adds the product from the Admins changes and then redirects back to the AdminPage
-            return View();
+            return View("ChangesConfirmation");
         }
 
         [HttpPost]
-        public IActionResult DeleteOrder()
+        public IActionResult DeleteProduct(Product product)
         {
-            // Deletes the Order from the Admins changes and then redirects back to the AdminPage
-            return View();
-        }
-
-        [HttpPost]
-        public IActionResult DeleteProduct()
-        {
+            _repo.RemoveProduct(product);
             // Deletes the Product from the Admins changes and then redirects back to the AdminPage
-            return View();
+            return View("ChangesConfirmation");
+        }
+
+        [HttpGet]
+        public IActionResult ListCustomers(int pageNum)
+        {
+            int pageSize = 15;
+
+            var stuff = new CustomerListViewModel
+            {
+                Customers = _repo.Customers
+                .OrderBy(x => x.last_name)
+                .Skip(pageSize * (pageNum - 1))
+                .Take(pageSize),
+
+                PaginationInfo = new PaginationInfo
+                {
+                    CurrentPage = pageNum,
+                    ItemsPerPage = pageSize,
+                    TotalItems = _repo.Customers.Count()
+                }
+            };
+           
+            // send the list customers page which is only accessible by the admin to see all the customers
+            return View(stuff);
+        }
+
+        [HttpGet]
+        public IActionResult EditCustomer(int id)
+        {
+            Customer customer = _repo.Customers.FirstOrDefault(c => c.customer_ID == id);
+            // send the edit customer page which is only accessible by the admin
+            return View(customer);
         }
 
         [HttpPost]
-        public IActionResult DeleteCustomer()
+        public IActionResult EditCustomer(Customer customer)
         {
+            _repo.UpdateCustomer(customer);
+            // Edits the customer from the Admins changes and then redirects back to the AdminPage
+            return View("ChangesConfirmation");
+        }
+
+        [HttpPost]
+        public IActionResult DeleteCustomer(Customer customer)
+        {
+            _repo.RemoveCustomer(customer);
             // Deletes the Customer from the Admins changes and then redirects back to the AdminPage
-            return View();
+            return View("ChangesConfirmation");
         }
 
         [HttpPost]
-        public IActionResult AddCustomer()
+        public IActionResult AddCustomer(Customer customer)
         {
+            _repo.AddCustomer(customer);
             // Adds the Customer from the Admins changes and then redirects back to the AdminPage
-            return View();
+            return View("ChangesConfirmation");
         }
 
 
