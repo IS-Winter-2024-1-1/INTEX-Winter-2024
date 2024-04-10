@@ -24,6 +24,12 @@ namespace Brickwell.Controllers
             return View();
         }
 
+        [Authorize(Roles = "Admin")]
+        public IActionResult Test()
+        {
+            return View();
+        }
+
         //[Authorize(Roles = "Admin")]
         public IActionResult Privacy()
         {
