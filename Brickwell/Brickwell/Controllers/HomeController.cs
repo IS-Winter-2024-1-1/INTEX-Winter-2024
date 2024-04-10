@@ -197,15 +197,19 @@ namespace Brickwell.Controllers
         }
 
         [HttpPost]
-        public IActionResult DeleteProduct()
+        public IActionResult DeleteProduct(Product product)
         {
+            _repo.RemoveProduct(product);
             // Deletes the Product from the Admins changes and then redirects back to the AdminPage
             return View();
         }
 
         [HttpGet]
-        public IActionResult ListCustomers()
+        public IActionResult ListCustomers(int pageNum)
         {
+            int pageSize = 15;
+
+            
             var customerList = _repo.Customers.OrderBy(customer => customer.last_name);
             // send the list customers page which is only accessible by the admin to see all the customers
             return View(customerList);
@@ -228,15 +232,17 @@ namespace Brickwell.Controllers
         }
 
         [HttpPost]
-        public IActionResult DeleteCustomer()
+        public IActionResult DeleteCustomer(Customer customer)
         {
+            _repo.RemoveCustomer(customer);
             // Deletes the Customer from the Admins changes and then redirects back to the AdminPage
             return View();
         }
 
         [HttpPost]
-        public IActionResult AddCustomer()
+        public IActionResult AddCustomer(Customer customer)
         {
+            _repo.AddCustomer(customer);
             // Adds the Customer from the Admins changes and then redirects back to the AdminPage
             return View();
         }
