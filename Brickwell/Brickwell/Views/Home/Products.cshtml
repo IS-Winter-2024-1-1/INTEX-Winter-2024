@@ -1,0 +1,13 @@
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+
+<div>
+    @foreach (Product p in Model.Product)
+    { 
+        <partial name="ProductCard" model="p"/>
+    }
+</div>
+
+
