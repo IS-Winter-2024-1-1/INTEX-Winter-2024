@@ -16,7 +16,8 @@ namespace Brickwell.Controllers
 
         public IActionResult Index()
         {
-            return View();
+            var userRecProducts = _repo.Products;
+            return View(userRecProducts);
         }
 
         public IActionResult About()
@@ -54,8 +55,9 @@ namespace Brickwell.Controllers
         [HttpGet]
         public IActionResult Products()
         {
+            var productData = _repo.Products;
             // send the product listings page
-            return View();
+            return View(productData);
         }
 
         [HttpGet]
