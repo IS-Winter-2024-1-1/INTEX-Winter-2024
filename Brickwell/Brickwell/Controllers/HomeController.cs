@@ -176,7 +176,7 @@ namespace Brickwell.Controllers
         [HttpGet]
         public IActionResult ListProducts(int pageNum)
         {
-            int pageSize = 10;
+            int pageSize = 9;
 
             var skipAmount = pageSize * (pageNum - 1);
             if (skipAmount < 0)

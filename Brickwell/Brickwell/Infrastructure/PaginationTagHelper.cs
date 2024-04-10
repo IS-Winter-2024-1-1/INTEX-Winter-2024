@@ -66,8 +66,10 @@ namespace Brickwell.Infrastructure
         private TagBuilder CreatePageLink(IUrlHelper urlHelper, int pageNumber, string? label = null)
         {
             TagBuilder tag = new TagBuilder("li");
+            tag.Attributes["class"] = "page-item";
             TagBuilder anchorTag = new TagBuilder("a");
             anchorTag.Attributes["href"] = urlHelper.Action(PageAction, new { pageNum = pageNumber });
+            anchorTag.Attributes["class"] = "page-link";
             anchorTag.InnerHtml.Append(pageNumber.ToString());
             if (!string.IsNullOrEmpty(label))
             {
@@ -81,7 +83,7 @@ namespace Brickwell.Infrastructure
         private TagBuilder CreateEllipsis()
         {
             TagBuilder tag = new TagBuilder("li");
-            tag.InnerHtml.AppendHtml("<span>...</span>");
+            tag.InnerHtml.AppendHtml("<span> ... </span>");
             return tag;
         }
     }

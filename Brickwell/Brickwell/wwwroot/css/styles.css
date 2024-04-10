@@ -11177,3 +11177,27 @@ footer a:hover, footer a:active, footer a:focus {
     max-width: 17rem;
   }
 }
+
+/* Pagination Styling*/
+.pagination li {
+    display: inline-block;
+    margin: 0 2px;
+}
+
+    .pagination li a {
+        display: block;
+        padding: 6px 12px;
+        background-color: #007bff;
+        color: #fff;
+        text-decoration: none;
+        border-radius: 5px;
+    }
+
+    .pagination li.active a {
+        background-color: #0056b3;
+    }
+
+    .pagination li.disabled a {
+        pointer-events: none;
+        background-color: #ccc;
+    }
