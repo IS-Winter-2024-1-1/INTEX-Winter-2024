@@ -8,11 +8,42 @@
 
 <a class="btn btn-primary" asp-controller="Home" asp-action="AddCustomer">Add New Customer</a> <br /><br />
 
-<div class="row gx-4 gx-lg-5 row-cols-1 row-cols-md-2 row-cols-xl-3 justify-content-center">
-    @foreach (var customer in Model.Customers)
-    {
-        <partial name="CustomerCard" model="customer" />
-    }
+<div class="table justify-content-center">
+        <table>
+            <thead>
+                <tr>
+                    <th>Last Name</th>
+                    <th>First Name</th>
+                    <th>Customer ID</th>
+                    <th>Username/Email</th>
+                    <th>Birth Day</th>
+                    <th>Country</th>
+                    <th>Gender</th>
+                    <th>Age</th>
+                    <th>Current Role</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var customer in Model.Customers)
+                {
+                <tr>
+                    <td>@customer.last_name</td>
+                    <td>@customer.first_name</td>
+                    <td>@customer.customer_ID</td>
+                    <td>@customer.username</td>
+                    <td>@customer.birth_date</td>
+                    <td>@customer.country_of_residence</td>
+                    <td>@customer.gender</td>
+                    <td>@customer.age</td>
+                    <td>Their Role</td>
+                    <td>
+                        <a class="btn btn-primary" asp-controller="Home" asp-action="EditCustomer" asp-route-id="@customer.customer_ID">Edit</a>
+                        <a class="btn btn-danger" asp-controller="Home" asp-action="DeleteCustomer" asp-route-id="@customer.customer_ID">Delete</a>
+                    </td>
+                </tr>
+                }
+            </tbody>
+        </table>
 </div>
 
 

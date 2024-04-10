@@ -161,15 +161,42 @@ namespace Brickwell.Controllers
 
         // List Fraud Orders for Admin
         [HttpGet]
-        public IActionResult ListOrders()
+        public IActionResult ListOrders(int pageNum)
         {
             // grabs all the orders that are considered fraud and puts them in order of most recent to oldest.
-            var orderList = _repo.Orders
-                .Where(order => order.fraud == 1)
-                .OrderByDescending(order => order.date);
+            int pageSize = 1000;
+
+            var skipAmount = pageSize * (pageNum - 1);
+            if (skipAmount < 0)
+            {
+                skipAmount = 0;
+            }
+
+            var things = _repo.Orders;
+            Console.WriteLine(things.First().date.GetType());
+
+
+            var oneMonthAgo = DateTime.Now.AddMonths(-1);
+
+            var stuff = new OrderListViewModel
+            {
+
+                // "03/01/2009"
+                Orders = _repo.Orders
+                  .Where(order => (order.fraud == 1 && Convert.ToDateTime(order.date) >= oneMonthAgo))  // Filter by fraud and date
+                  .OrderByDescending(order => order.date),
+
+                PaginationInfo = new PaginationInfo
+                    {
+                        CurrentPage = pageNum,
+                        ItemsPerPage = pageSize,
+                        TotalItems = _repo.Orders.Count()
+                    }
+            };
+
 
             // send the list orders page which is only accessible by the admin to see all the orders
-            return View(orderList);
+            return View(stuff);
         }
 
         // List all Products for Admin
@@ -263,7 +290,7 @@ namespace Brickwell.Controllers
         [HttpGet]
         public IActionResult ListCustomers(int pageNum)
         {
-            int pageSize = 30;
+            int pageSize = 1000;
 
             var skipAmount = pageSize * (pageNum - 1);
             if (skipAmount < 0)
@@ -312,6 +339,13 @@ namespace Brickwell.Controllers
             _repo.RemoveCustomer(customer);
             // Deletes the Customer from the Admins changes and then redirects back to the AdminPage
             return View("ChangesConfirmation");
+        }
+
+        [HttpGet]
+        public IActionResult AddCustomer()
+        {
+            // send the add customer page which is only accessible by the admin
+            return View("EditCustomer");
         }
 
         [HttpPost]
