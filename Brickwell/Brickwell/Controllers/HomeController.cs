@@ -151,6 +151,14 @@ namespace Brickwell.Controllers
         public IActionResult EditProduct(int id)
         {
             Product product = _repo.Products.FirstOrDefault(p => p.product_ID == id);
+
+            var uniqueCategories = _repo.Products
+                .Select(x => x.category)
+                .Distinct()
+                .OrderBy(x => x)
+                .ToList();
+
+            ViewBag.categories = uniqueCategories;
             // send the edit product page which is only accessible by the admin
             return View(product);
         }
@@ -165,12 +173,27 @@ namespace Brickwell.Controllers
             return RedirectToAction("ListProducts");
         }
 
-        [HttpPost]
+        [HttpGet]
         public IActionResult AddProduct()
         {
+            var uniqueCategories = _repo.Products
+                .Select(x => x.category)
+                .Distinct()
+                .OrderBy(x => x)
+                .ToList();
 
-            // Adds the product from the Admins changes and then redirects back to the AdminPage
+            ViewBag.categories = uniqueCategories;
+
+            // send the add product page which is only accessible by the admin
             return View("EditProduct");
+        }
+
+        [HttpPost]
+        public IActionResult AddProduct(Product newProduct)
+        {
+            _repo.AddProduct(newProduct);
+            // Adds the product from the Admins changes and then redirects back to the AdminPage
+            return View("ListProduct");
         }
 
         [HttpPost]
