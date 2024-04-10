@@ -310,6 +310,7 @@ namespace Brickwell.Controllers
         }
 
         [HttpGet]
+        [Authorize]
         public async Task<IActionResult> ListCustomers(int pageNum)
         {
             int pageSize = 1000;
