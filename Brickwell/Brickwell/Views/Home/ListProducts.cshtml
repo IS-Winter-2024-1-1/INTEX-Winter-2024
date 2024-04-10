@@ -6,48 +6,10 @@
 
 <h1>@ViewData["Title"]</h1>
 
-<div class="product-list">
+<div class="row gx-4 gx-lg-5 row-cols-1 row-cols-md-2 row-cols-xl-3 justify-content-center">
     @foreach (var product in Model.Products)
     {
-        <div class="product">
-            <div class="product-property">
-                <strong>Product ID:</strong> @product.product_ID
-            </div>
-            <div class="product-property">
-                <strong>Name:</strong> @product.name
-            </div>
-            <div class="product-property">
-                <strong>Year:</strong> @product.year
-            </div>
-            <div class="product-property">
-                <strong>Number of Parts:</strong> @product.num_parts
-            </div>
-            <div class="product-property">
-                <strong>Price:</strong> @product.price
-            </div>
-            <div class="product-property">
-                <strong>Image Link:</strong> @product.img_link
-            </div>
-            <div class="product-property">
-                <strong>Primary Color:</strong> @product.primary_color
-            </div>
-            <div class="product-property">
-                <strong>Secondary Color:</strong> @product.secondary_color
-            </div>
-            <div class="product-property">
-                <strong>Description:</strong> @product.description
-            </div>
-            <div class="product-property">
-                <strong>Category:</strong> @product.category
-            </div>
-            <div class="product-property">
-                <a class="btn btn-info" asp-controller="Home" asp-action="EditProduct" asp-route-id="@product.product_ID">Edit</a>
-                <form asp-controller="Home" asp-action="DeleteProduct" method="post" style="display:inline;">
-                    <input type="hidden" name="product_ID" value="@product.product_ID" />
-                    <button type="submit" class="btn btn-danger">Delete</button>
-                </form>
-            </div>
-        </div>
+        <partial name="ProductOverviewCard" model="product" />
     }
 </div>
 

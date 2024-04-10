@@ -34,14 +34,16 @@ namespace Brickwell.Infrastructure
                 ul.AddCssClass("pagination justify-content-center");
 
                 int currentPage = PageModel.CurrentPage;
-                int maxVisiblePages = 5; // Adjust this value to change the maximum number of visible page links
+
+                // Adjust these values as needed
+                int maxVisiblePages = 5; // Maximum number of visible page links
                 int startPage = Math.Max(1, currentPage - maxVisiblePages / 2);
                 int endPage = Math.Min(startPage + maxVisiblePages - 1, PageModel.TotalPages);
                 startPage = Math.Max(1, endPage - maxVisiblePages + 1);
 
                 if (startPage > 1)
                 {
-                    ul.InnerHtml.AppendHtml(CreatePageLink(urlHelper, 1));
+                    ul.InnerHtml.AppendHtml(CreatePageLink(urlHelper, 1, "First"));
                     ul.InnerHtml.AppendHtml(CreateEllipsis());
                 }
 
@@ -53,7 +55,7 @@ namespace Brickwell.Infrastructure
                 if (endPage < PageModel.TotalPages)
                 {
                     ul.InnerHtml.AppendHtml(CreateEllipsis());
-                    ul.InnerHtml.AppendHtml(CreatePageLink(urlHelper, PageModel.TotalPages));
+                    ul.InnerHtml.AppendHtml(CreatePageLink(urlHelper, PageModel.TotalPages, "Last"));
                 }
 
                 result.InnerHtml.AppendHtml(ul);
@@ -61,12 +63,17 @@ namespace Brickwell.Infrastructure
             }
         }
 
-        private TagBuilder CreatePageLink(IUrlHelper urlHelper, int pageNumber)
+        private TagBuilder CreatePageLink(IUrlHelper urlHelper, int pageNumber, string? label = null)
         {
             TagBuilder tag = new TagBuilder("li");
             TagBuilder anchorTag = new TagBuilder("a");
             anchorTag.Attributes["href"] = urlHelper.Action(PageAction, new { pageNum = pageNumber });
             anchorTag.InnerHtml.Append(pageNumber.ToString());
+            if (!string.IsNullOrEmpty(label))
+            {
+                anchorTag.InnerHtml.Append(" ");
+                anchorTag.InnerHtml.Append(label);
+            }
             tag.InnerHtml.AppendHtml(anchorTag);
             return tag;
         }

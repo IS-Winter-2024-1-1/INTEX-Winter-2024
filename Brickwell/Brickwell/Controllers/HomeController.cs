@@ -226,7 +226,7 @@ namespace Brickwell.Controllers
             _repo.UpdateProduct(product);
             // Edits the product from the Admins changes and then redirects back to the AdminPage
             // Redirects to the Products List page
-            return RedirectToAction("ChangesConfirmation");
+            return View("ChangesConfirmation");
         }
 
         [HttpGet]
