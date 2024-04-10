@@ -4,7 +4,7 @@
 
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.AspNetCore.Mvc.RazorPages; using Brickwell.Models;
 using Microsoft.Extensions.Logging;
 
 namespace Brickwell.Areas.Identity.Pages.Account.Manage
