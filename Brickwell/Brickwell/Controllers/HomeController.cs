@@ -209,20 +209,7 @@ namespace Brickwell.Controllers
         {
             int pageSize = 15;
 
-            var customers = new ItemListViewModel
-            {
-                Books = _repo.Books
-                .OrderBy(x => x.Title)
-                .Skip(10 * (pageNum - 1))
-                .Take(10),
-
-                PaginationInfo = new PaginationInfo
-                {
-                    CurrentPage = pageNum,
-                    ItemsPerPage = pageSize,
-                    TotalItems = _repo.Books.Count()
-                }
-            };
+            
             var customerList = _repo.Customers.OrderBy(customer => customer.last_name);
             // send the list customers page which is only accessible by the admin to see all the customers
             return View(customerList);
