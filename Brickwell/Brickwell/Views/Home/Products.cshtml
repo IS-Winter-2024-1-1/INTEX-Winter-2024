@@ -2,11 +2,12 @@
     ViewData["Title"] = "Home Page";
 }
 
+@model IQueryable<Product>
 
 <div>
-    @foreach (Product p in Model.Product)
+    @foreach (var product in Model)
     { 
-        <partial name="ProductCard" model="p"/>
+        <partial name="ProductCard" model="product"/>
     }
 </div>
 

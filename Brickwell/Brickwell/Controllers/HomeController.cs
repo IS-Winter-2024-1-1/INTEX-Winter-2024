@@ -52,7 +52,7 @@ namespace Brickwell.Controllers
         }
 
         [HttpGet]
-        public IActionResult ProductPage()
+        public IActionResult Products()
         {
             // send the product listings page
             return View();
