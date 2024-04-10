@@ -102,7 +102,7 @@ app.Use(async (ctx, next) =>
     ctx.Response.Headers.Append("Content-Security-Policy", // TODO: Keep this updated!
                                 "default-src 'self'" +
                                 "script-src 'self'" +
-                                "img-src 'self'" +
+                                "img-src 'self' https://m.media-amazon.com/ https://www.lego.com/ https://images.brickset.com/ https://www.brickeconomy.com/;" +
                                 "style-src 'self' 'unsafe-inline'");
     await next();
 });
