@@ -180,18 +180,16 @@ namespace Brickwell.Controllers
 
             var stuff = new OrderListViewModel
             {
-
-                // "03/01/2009"
                 Orders = _repo.Orders
-                  .Where(order => (order.fraud == 1 && Convert.ToDateTime(order.date) >= oneMonthAgo))  // Filter by fraud and date
-                  .OrderByDescending(order => order.date),
+                    .Where(order => order.fraud == 1 && DateTime.Parse(order.date) >= oneMonthAgo)  // Filter by fraud and date
+                    .OrderByDescending(order => order.date),
 
                 PaginationInfo = new PaginationInfo
-                    {
-                        CurrentPage = pageNum,
-                        ItemsPerPage = pageSize,
-                        TotalItems = _repo.Orders.Count()
-                    }
+                {
+                    CurrentPage = pageNum,
+                    ItemsPerPage = pageSize,
+                    TotalItems = _repo.Orders.Count()
+                }
             };
 
 
