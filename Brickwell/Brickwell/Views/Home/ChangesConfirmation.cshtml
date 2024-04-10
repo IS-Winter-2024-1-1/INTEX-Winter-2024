@@ -5,7 +5,21 @@
     ViewData["Title"] = "Changes Saved";
 }
 
-<h1>@ViewData["Title"]</h1>
 
-<p>Your changes have been saved.</p>
-<a asp-controller="Home" asp-action="AdminPage">Return to Admin Page</a>
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-body">
+                    <h1 class="card-title">@ViewData["Title"]</h1>
+                    <p>Your changes have been saved.</p>
+                    <div class="text-center">
+                        <a class="btn btn-primary" asp-controller="Home" asp-action="AdminPage">Return to Admin Page</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

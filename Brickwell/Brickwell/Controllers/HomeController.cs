@@ -174,11 +174,32 @@ namespace Brickwell.Controllers
 
         // List all Products for Admin
         [HttpGet]
-        public IActionResult ListProducts()
+        public IActionResult ListProducts(int pageNum)
         {
-            var productList = _repo.Products.OrderByDescending(product => product.name);
+            int pageSize = 9;
+
+            var skipAmount = pageSize * (pageNum - 1);
+            if (skipAmount < 0)
+            {
+                skipAmount = 0;
+            }
+
+            var stuff = new ProductAdminListViewModel
+            {
+                Products = _repo.Products
+                .OrderBy(x => x.name)
+                .Skip(skipAmount)
+                .Take(pageSize),
+
+                PaginationInfo = new PaginationInfo
+                {
+                    CurrentPage = pageNum,
+                    ItemsPerPage = pageSize,
+                    TotalItems = _repo.Products.Count()
+                }
+            };
             // send the list products page which is only accessible by the admin to see all the products
-            return View(productList);
+            return View(stuff);
         }
 
         // Edit Product for Admin
@@ -205,7 +226,7 @@ namespace Brickwell.Controllers
             _repo.UpdateProduct(product);
             // Edits the product from the Admins changes and then redirects back to the AdminPage
             // Redirects to the Products List page
-            return RedirectToAction("ChangesConfirmation");
+            return View("ChangesConfirmation");
         }
 
         [HttpGet]
@@ -242,13 +263,19 @@ namespace Brickwell.Controllers
         [HttpGet]
         public IActionResult ListCustomers(int pageNum)
         {
-            int pageSize = 15;
+            int pageSize = 30;
+
+            var skipAmount = pageSize * (pageNum - 1);
+            if (skipAmount < 0)
+            {
+                skipAmount = 0;
+            }
 
             var stuff = new CustomerListViewModel
             {
                 Customers = _repo.Customers
                 .OrderBy(x => x.last_name)
-                .Skip(pageSize * (pageNum - 1))
+                .Skip(skipAmount)
                 .Take(pageSize),
 
                 PaginationInfo = new PaginationInfo
