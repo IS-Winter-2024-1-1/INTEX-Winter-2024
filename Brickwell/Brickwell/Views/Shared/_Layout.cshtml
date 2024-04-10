@@ -10,7 +10,7 @@
     <link href="css/styles.css" rel="stylesheet" />
     <link href="css/cardstyles.css" rel="stylesheet" />
 </head>
-<body class="gradient-bg">
+<body style="background: linear-gradient(to right, #5279AD, #86BBD8);">
     <header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm mb-3">
             <div class="container-fluid">
@@ -45,12 +45,12 @@
             @RenderBody()
         </main>
     </div>
-<footer class="bg-orange text-center py-5">
+<footer class="bg-orange text-center py-5" style="background: #fd7e14;">
     <div class="container px-5">
         <div class="text-white-50 small">
             <div class="mb-2">&copy; Brickwell Inc. 2023. All Rights Reserved.</div>
             <div>Contact us: happybricking@gmail.com | Phone: +123456789</div>
-            <a href="#!">Privacy</a>
+            <a asp-controller="Home" asp-action="Privacy">Privacy</a>
         </div>
     </div>
 </footer>
