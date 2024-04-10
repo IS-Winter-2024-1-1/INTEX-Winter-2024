@@ -108,8 +108,11 @@ namespace Brickwell.Controllers
                     {
                         CurrentPage = pageNum,
                         ItemsPerPage = pageSize,
-                        TotalItems = _repo.Products.Count()
-                    }
+                        TotalItems = productType == null ? 
+                            _repo.Products.Count() : _repo.Products.Where(x => x.category == productType).Count()
+                    },
+                    
+                    CurrentProductType = productType
                 };
                 return View(stuff);
             }
