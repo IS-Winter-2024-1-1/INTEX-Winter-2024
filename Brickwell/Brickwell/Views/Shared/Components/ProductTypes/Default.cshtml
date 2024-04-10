@@ -8,6 +8,6 @@
     <a class="btn btn-outline-light" asp-controller="Home" asp-action="Products" asp-route-projectType="" asp-route-pageNum="">View All</a>
     @foreach (string cat in Model ?? Enumerable.Empty<string>())
     {
-        <a class="btn btn-outline-light" asp-controller="Home" asp-action="Products" asp-route-projectType="@cat" asp-route-pageNum="1">@cat</a>
+        <a class="btn btn-outline-light" asp-controller="Home" asp-action="Products" asp-route-productType="@cat" asp-route-pageNum="1">@cat</a>
     }
 </div>
