@@ -173,6 +173,9 @@ namespace Brickwell.Controllers
         [HttpGet]
         public IActionResult Checkout(string returnUrl)
         {
+            //Get countries from the database
+            ViewBag.countries = _repo.Orders.Select(x => x.shipping_address).Distinct().OrderBy(x => x).ToList();
+
             // check the user credentials in the database
             //Log in or reject and redirect to index page
             // send the checkout page
