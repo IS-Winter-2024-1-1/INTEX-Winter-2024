@@ -180,17 +180,34 @@ namespace Brickwell.Controllers
 
         [HttpGet]
         [Authorize]
-        public IActionResult Checkout(string returnUrl)
+        public async Task<IActionResult> Checkout(string returnUrl)
         {
-            //Get countries from the database
-            ViewBag.countries = _repo.Orders.Select(x => x.shipping_address).Distinct().OrderBy(x => x).ToList();
-            ViewBag.cardTypes = _repo.Orders.Select(x => x.type_of_card).Distinct().OrderBy(x => x).ToList();
-            // check the user credentials in the database
-            //Log in or reject and redirect to index page
-            // send the checkout page
-            cart.ReturnUrl = returnUrl ?? "/";
-            // send the cart page
-            return View(cart);
+            //get current user  
+            var currentuser = await _usermanager.FindByNameAsync(User.Identity.Name);
+
+            IQueryable<Customer> customerList = _repo.Customers.Where(x => x.username == currentuser.UserName);
+            if (customerList.Count() < 1)
+            {
+                return RedirectToAction("CustomerInfo");
+            }
+            else if (customerList.Count() > 1)
+            {
+                Console.WriteLine("ERROR: Multiple customers with username \"" + currentuser.UserName + "\". Manual resolution nessecary.");
+                return StatusCode(500);
+            }
+            else
+            {
+
+                //Get countries from the database
+                ViewBag.countries = _repo.Orders.Select(x => x.shipping_address).Distinct().OrderBy(x => x).ToList();
+                ViewBag.cardTypes = _repo.Orders.Select(x => x.type_of_card).Distinct().OrderBy(x => x).ToList();
+                // check the user credentials in the database
+                //Log in or reject and redirect to index page
+                // send the checkout page
+                cart.ReturnUrl = returnUrl ?? "/";
+                // send the cart page
+                return View(cart);
+            }
         }
 
         [HttpPost]
@@ -203,7 +220,7 @@ namespace Brickwell.Controllers
             IQueryable<Customer> customerList = _repo.Customers.Where(x => x.username == currentuser.UserName);
             if (customerList.Count() < 1)
             {
-                return RedirectToAction("CustomerInfo");
+                return RedirectToAction("SSAddCustomer");
             }
             else if (customerList.Count() > 1)
             {
@@ -275,6 +292,7 @@ namespace Brickwell.Controllers
         
         // Add customer (self-service).
         [HttpGet]
+        [Authorize]
         public IActionResult SSAddCustomer()
         {
             
@@ -286,9 +304,10 @@ namespace Brickwell.Controllers
         [HttpPost]
         public IActionResult SSAddCustomer(Customer newCustomer)
         {
+            newCustomer.username = User.Identity.Name;
             _repo.AddCustomer(newCustomer);
             // Adds the 
-            return RedirectToAction("Cart");
+            return RedirectToAction("Index");
         }
 
         // Update Customer (self-service).
@@ -310,7 +329,7 @@ namespace Brickwell.Controllers
         {
             _repo.UpdateCustomer(customer);
             // 
-            return View("ChangesConfirmation");
+            return View("Index");
         }
 
 
