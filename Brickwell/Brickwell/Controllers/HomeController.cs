@@ -222,10 +222,10 @@ namespace Brickwell.Controllers
                     { "day_of_week", DateTime.Now.ToString("dddd").Substring(0,3) },
                     { "time", DateTime.Now.ToString("HH") },
                     { "entry_mode", "CVC" },
-                    { "amount", form["amount"] },
+                    { "amount", cart.ComputeTotalSum() },
                     { "type_of_transaction", "Online" },
-                    { "country_of_transaction", form["country"] },
-                    { "shipping_address", form["address"] }, 
+                    { "country_of_transaction", form["billing_country"] },
+                    { "shipping_address", form["country"] }, 
                     { "bank", "drop" }, // This also gets dropped.
                     { "type_of_card", "drop" } // This also gets dropped.
                 };
@@ -258,7 +258,19 @@ namespace Brickwell.Controllers
 
                 Console.WriteLine(responseString);
 
-                return View();
+                //ViewBag.OrderData = orderDictionary;
+                if (true)
+                {
+                    cart.Clear();
+                    return View("OrderConfirmation");
+                }
+                else
+                {
+                    cart.Clear();
+                    return RedirectToAction("OrderReview");
+                }
+
+
             }
             
 
