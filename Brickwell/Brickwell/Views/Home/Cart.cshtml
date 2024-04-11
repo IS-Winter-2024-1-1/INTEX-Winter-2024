@@ -45,7 +45,7 @@ else
         </tbody>
     </table>
     <h3>Total: @Model.ComputeTotalSum().ToString("C")</h3>
-    <form method="post" action="Checkout">
+    <form method="get" asp-controller="Home" asp-action="Checkout">
         <button type="submit">Checkout</button>
     </form>
     <div>
