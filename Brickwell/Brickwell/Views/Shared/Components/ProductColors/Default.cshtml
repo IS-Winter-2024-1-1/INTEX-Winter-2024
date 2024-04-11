@@ -9,10 +9,10 @@
         Color
     </button>
     <div class="dropdown-menu">
-        <a class="dropdown-item" asp-controller="Home" asp-action="Products" asp-route-projectType="" asp-route-pageNum="">View All</a>
+        <a class="dropdown-item" href="@Url.Action("Products", "Home", new { productType = ViewBag.CurrentProductType, pageNum = 1, pageSize= ViewBag.pageSize })">Any Color</a>
         @foreach (string pColor in Model ?? Enumerable.Empty<string>())
         {
-            <a class="dropdown-item" asp-controller="Home" asp-action="Products" asp-route-productColor="@pColor" asp-route-pageNum="1">@pColor</a>
+            <a class="dropdown-item" href="@Url.Action("Products", "Home", new { productType = ViewBag.CurrentProductType, productColor = pColor, pageNum = 1, pageSize= ViewBag.pageSize })">@pColor</a>
         }
     </div>
 </div>

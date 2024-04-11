@@ -13,6 +13,7 @@ public class ProductTypesViewComponent : ViewComponent
     
     public IViewComponentResult Invoke()
     {
+        
         var productCategories = _repo.Products
             .Select(x => x.category)
             .Distinct()

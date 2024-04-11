@@ -1,0 +1,18 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+    Layout = null;
+}
+
+<div class="btn-group">
+    <button class="btn btn-primary btn-lg dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        Items Per Page
+    </button>
+    <div class="dropdown-menu">
+        <a class="dropdown-item" href="@Url.Action("Products", "Home", new { productType = ViewBag.CurrentProductType, productColor = ViewBag.CurrentProductColor, pageNum = 1, pageSize = 5 })">5</a>
+        <a class="dropdown-item" href="@Url.Action("Products", "Home", new { productType = ViewBag.CurrentProductType, productColor = ViewBag.CurrentProductColor, pageNum = 1, pageSize = 10 })">10</a>
+        <a class="dropdown-item" href="@Url.Action("Products", "Home", new { productType = ViewBag.CurrentProductType, productColor = ViewBag.CurrentProductColor, pageNum = 1, pageSize = 20 })">20</a>
+
+    </div>
+</div>

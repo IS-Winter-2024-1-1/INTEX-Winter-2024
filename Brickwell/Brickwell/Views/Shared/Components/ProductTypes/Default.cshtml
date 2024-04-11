@@ -8,11 +8,11 @@
         Category
     </button>
     <div class="dropdown-menu">
-        <a class="dropdown-item" asp-controller="Home" asp-action="Products" asp-route-projectType="" asp-route-pageNum="">View All</a>
+        <a class="dropdown-item" href="@Url.Action("Products", "Home", new { productColor = ViewBag.CurrentProductColor, pageNum = 1, pageSize= ViewBag.pageSize })">Any</a>
             @foreach (string cat in Model ?? Enumerable.Empty<string>())
             {
-                <a class="dropdown-item" asp-controller="Home" asp-action="Products" asp-route-productType="@cat" asp-route-pageNum="1">@cat</a>
-            }
+            <a class="dropdown-item" href="@Url.Action("Products", "Home", new { productType = cat, productColor = ViewBag.CurrentProductColor, pageNum = 1, pageSize= ViewBag.pageSize })">@cat</a>
+        }
     </div>
 </div>
 
