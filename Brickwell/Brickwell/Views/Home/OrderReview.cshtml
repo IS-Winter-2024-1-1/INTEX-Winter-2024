@@ -8,18 +8,27 @@
 @model Order
 
 <div class="container">
-    <div class="row justify-content-center align-items-center" style="height: 100vh;">
-        <div class="col-md-6 text-center">
-            <h1>@ViewData["Title"]</h1>
-            <img src="~/img/lego_order_review.jpg" class="img-fluid rounded-circle" style="max-width:50%;" alt="Order Confirmation" />
-            <h2>Thank you for your order!</h2>
-            <p>Your order number is Model.transaction_ID</p>
-            <p>Your order will be shipped to Model.shipping_address</p>
-            <p>Your order total is Model.amount.ToString("C")</p>
-            <p>Your order will be reviewed for accuracy before we ship it out.</p>
-            <p>Thank you for shopping with us!</p>
-            <a class="btn btn-primary" href="/">Return To Home</a>
+    <div class="card">
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-6 text-center text-dark">
+                    <h1>@ViewData["Title"]</h1>
+                    <hr />
+                    <img src="~/img/lego_order_review.jpg" class="img-fluid rounded-circle" style="max-width:50%;" alt="Order Confirmation" />
+
+                </div>
+                <div class="col-md-6 text-center text-dark">
+                    <h2>Thank you for your order!</h2>
+                    <p>Your order number is Model.transaction_ID</p>
+                    <p>Your order will be shipped to Model.shipping_address</p>
+                    <p>Your order total is Model.amount.ToString("C")</p>
+                    <p>Your order will be reviewed for accuracy before we ship it out.</p>
+                    <p>Thank you for shopping with us!</p>
+                    <a class="btn btn-primary" href="/">Return To Home</a>
+                </div>
+            </div>
         </div>
     </div>
+
 </div>
 
