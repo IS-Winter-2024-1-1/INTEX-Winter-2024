@@ -2,6 +2,7 @@
 {
     public class Cart
     {
+        public string ReturnUrl { get; set; } = "/";
         public List<CartLine> Lines { get; set; } = new List<CartLine>();
 
         public void AddItem(Product prod, int quantity)

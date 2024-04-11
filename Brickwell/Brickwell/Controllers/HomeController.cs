@@ -131,9 +131,10 @@ namespace Brickwell.Controllers
 
         // Create Cart for the session here
         public Cart? cart { get; set; } 
+        
 
         [HttpPost]
-        public IActionResult AddToCart(int product_ID, int quantity)
+        public IActionResult AddToCart(int product_ID, string returnUrl, int quantity)
         {
             Console.WriteLine("id: " + product_ID + " qty: " + quantity);
             Product product = _repo.Products.FirstOrDefault(p => p.product_ID == product_ID);
@@ -146,13 +147,15 @@ namespace Brickwell.Controllers
             }
 
             // add the product to the cart session and then send the cart page
-            return RedirectToAction("Cart");
+            return RedirectToAction("Cart", new {returnUrl = returnUrl});
         }
 
         [HttpGet]
-        public IActionResult Cart()
+        public IActionResult Cart(string returnUrl)
         {
+            
             cart = HttpContext.Session.GetJson<Cart>("cart") ?? new Cart();
+            cart.ReturnUrl = returnUrl ?? "/";
             // send the cart page
             return View(cart);
         }
