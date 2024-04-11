@@ -7,8 +7,10 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using Newtonsoft.Json;
 using System.Data;
 using System.Diagnostics;
+using System.Net.Http;
 
 namespace Brickwell.Controllers
 {
@@ -31,7 +33,7 @@ namespace Brickwell.Controllers
             _repo = temp;
             _dbcontext = applicationDbContext;
             _usermanager = userManager;
-            _roleManger = roleManager;
+            _roleManager = roleManager;
             cart = cartService;
             _roleManager = roleManager;
         }
@@ -186,14 +188,76 @@ namespace Brickwell.Controllers
         }
 
         [HttpPost]
-        public IActionResult Checkout(Order order)
+        public async Task<IActionResult> Checkout(Order order)
         {
             //get current user  
             var currentuser = await _usermanager.FindByNameAsync(User.Identity.Name);
 
+            IQueryable<Customer> customerList = _repo.Customers.Where(x => x.username == currentuser.UserName);
+            if (customerList.Count() < 1)
+            {
+                return RedirectToAction("CustomerInfo");
+            }
+            else if (customerList.Count() > 1)
+            {
+                Console.WriteLine("ERROR: Multiple customers with username \"" + currentuser.UserName + "\". Manual resolution nessecary.");
+                return StatusCode(500);
+            }
+            else
+            {
 
 
-            return View();
+                Dictionary<string, dynamic> customerDictionary = new Dictionary<string, dynamic>
+                {
+                    { "transaction_ID", 0 }, // This gets dropped.
+                    { "customer_ID", 0 }, // This also gets dropped.
+                    { "date", "4" },
+                    { "day_of_week", "4" },
+                    { "time", "4" },
+                    { "entry_mode", "4" },
+                    { "amount", "4" },
+                    { "type_of_transaction", "4" },
+                    { "country_of_transaction", "4" },
+                    { "shipping_address", "4" },
+                    { "bank", "4" },
+                    { "type_of_card", "4" }
+                };
+                Dictionary<string, dynamic> orderDictionary = new Dictionary<string, dynamic>
+                {
+                    { "customer_ID", 0 }, // This still gets dropped.
+                    { "first_name", "4" },
+                    { "last_name", "4" },
+                    { "birth_date", "4" },
+                    { "country_of_residence", "4" },
+                    { "gender", "4" },
+                    { "age", "4" }
+                };
+                
+
+                string customerJSON = JsonConvert.SerializeObject(customerDictionary);
+                string orderJSON = JsonConvert.SerializeObject(orderDictionary);
+
+                // make the post request to the fraud endpoint
+
+                HttpClient client = new HttpClient();
+
+                Dictionary<string, string> values = new Dictionary<string, string>
+                {
+                    { "order_data", orderJSON },
+                    { "customer_data", customerJSON}
+                };
+                FormUrlEncodedContent content = new FormUrlEncodedContent(values);
+                HttpResponseMessage response = await client.PostAsync("https://isitfraud.azurewebsites.net/api/isitfraud", content);
+                string responseString = await response.Content.ReadAsStringAsync();
+
+                
+
+                return View();
+            }
+            
+
+
+            
         }
 
         [HttpGet]
