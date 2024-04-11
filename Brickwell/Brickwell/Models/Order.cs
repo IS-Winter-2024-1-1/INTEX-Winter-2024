@@ -6,7 +6,7 @@ namespace Brickwell.Models
     public class Order
     {
         [Key]
-        public required int transaction_ID { get; set; }
+        public int transaction_ID { get; set; }
         [ForeignKey("Customer")]
         public required int customer_ID { get; set; }
         public required Customer Customer { get; set; }
@@ -18,8 +18,8 @@ namespace Brickwell.Models
         public required string type_of_transaction { get; set; }
         public required string country_of_transaction { get; set; }
         public required string shipping_address { get; set; }
-        public required string bank { get; set; }
-        public required string type_of_card { get; set; }
+        public string? bank { get; set; }
+        public string? type_of_card { get; set; }
         public int? fraud { get; set; }
     }
 }

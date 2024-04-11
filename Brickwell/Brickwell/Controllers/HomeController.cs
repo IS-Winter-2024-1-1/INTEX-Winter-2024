@@ -275,6 +275,22 @@ namespace Brickwell.Controllers
 
                 Console.WriteLine(responseString);
 
+                Order order = new Order() 
+                { 
+                    customer_ID = orderDictionary["customer_ID"], 
+                    Customer = customer,
+                    date = orderDictionary["date"],
+                    day_of_week = orderDictionary["day_of_week"],
+                    time = orderDictionary["time"],
+                    amount = orderDictionary["amount"],
+                    entry_mode = orderDictionary["entry_mode"],
+                    type_of_transaction = orderDictionary["type_of_transaction"],
+                    country_of_transaction = orderDictionary["country_of_transaction"],
+                    shipping_address = orderDictionary["shipping_address"]
+
+                };
+
+
                 //ViewBag.OrderData = orderDictionary;
                 if (true)
                 {
