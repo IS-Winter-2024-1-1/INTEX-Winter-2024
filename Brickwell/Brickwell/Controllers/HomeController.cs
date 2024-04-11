@@ -1,4 +1,5 @@
 using Brickwell.Data;
+using Brickwell.Infrastructure;
 using Brickwell.Models;
 using Brickwell.Models.ViewModels;
 using Microsoft.AspNetCore.Authorization;
@@ -129,7 +130,7 @@ namespace Brickwell.Controllers
         }
 
         // Create Cart for the session here
-        public Cart cart = new Cart();
+        public Cart? cart { get; set; } 
 
         [HttpPost]
         public IActionResult AddToCart(int product_ID, int quantity)
@@ -137,16 +138,23 @@ namespace Brickwell.Controllers
             Console.WriteLine("id: " + product_ID + " qty: " + quantity);
             Product product = _repo.Products.FirstOrDefault(p => p.product_ID == product_ID);
 
-            cart.AddItem(product, quantity);
+            if (product != null)
+            {
+                cart = HttpContext.Session.GetJson<Cart>("cart") ?? new Cart();
+                cart.AddItem(product, quantity);
+                HttpContext.Session.SetJson("cart", cart);
+            }
+
             // add the product to the cart session and then send the cart page
-            return View("Cart", cart);
+            return RedirectToAction("Cart");
         }
 
         [HttpGet]
         public IActionResult Cart()
         {
+            cart = HttpContext.Session.GetJson<Cart>("cart") ?? new Cart();
             // send the cart page
-            return View();
+            return View(cart);
         }
 
         [HttpGet]
