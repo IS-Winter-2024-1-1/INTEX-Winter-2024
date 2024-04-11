@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using System.Data;
 using System.Diagnostics;
 
 namespace Brickwell.Controllers
@@ -16,7 +17,7 @@ namespace Brickwell.Controllers
         private IBrickwellRepository _repo;
         private readonly ApplicationDbContext _dbcontext;
         private readonly UserManager<ApplicationUser> _usermanager;
-        private readonly RoleManager<ApplicationRole> _roleManger;
+        private readonly RoleManager<ApplicationRole> _roleManager;
 
         // Create Cart for the session here
         public Cart cart { get; set; }
@@ -32,6 +33,7 @@ namespace Brickwell.Controllers
             _usermanager = userManager;
             _roleManger = roleManager;
             cart = cartService;
+            _roleManager = roleManager;
         }
 
 
@@ -169,24 +171,22 @@ namespace Brickwell.Controllers
         }
 
         [HttpGet]
-        public IActionResult ProceedToCheckout()
-        {
-            // send the confirm proceed to checkout page
-            return View();
-        }
-
-        [HttpGet]
         public IActionResult Checkout()
         {
+            // check the user credentials in the database
+            //Log in or reject and redirect to index page
             // send the checkout page
             return View();
         }
 
         [HttpPost]
-        public IActionResult Checkout(string x)
+        public IActionResult Checkout(Order order)
         {
-            // check the user credentials in the database
-            //Log in or reject and redirect to index page
+            //get current user  
+            var currentuser = await _usermanager.FindByNameAsync(User.Identity.Name);
+
+
+
             return View();
         }
 
@@ -387,14 +387,45 @@ namespace Brickwell.Controllers
         public IActionResult EditCustomer(int id)
         {
             Customer customer = _repo.Customers.FirstOrDefault(c => c.customer_ID == id);
+
+            // Try to get the name of the role of the Customer.
+            var userRole = _dbcontext.ApplicationUserRoles.Include(c => c.User).Include(c => c.Role).Where(x => x.User.UserName == customer.username).FirstOrDefault();
+            Console.WriteLine(userRole);
+            if (userRole != null)
+            {
+                ViewBag.CurrentlyEditingRole = userRole.Role.Name;
+            }
+            else
+            {
+                ViewBag.CurrentlyEditingRole = "Account Not Found";
+            }
+
+
+
             // send the edit customer page which is only accessible by the admin
             return View(customer);
         }
 
         [HttpPost]
-        public IActionResult EditCustomer(Customer customer)
+        public async Task<IActionResult> EditCustomer(Customer customer, IFormCollection form)
         {
             _repo.UpdateCustomer(customer);
+
+            string role = form["role"];
+
+            if (role == "Customer" || role == "Admin")
+            {
+                ApplicationUser user = await _usermanager.FindByNameAsync(customer.username);
+                IList<string> roles = await _usermanager.GetRolesAsync(user);
+
+                foreach (string currentRole in roles)
+                {
+                    await _usermanager.RemoveFromRoleAsync(user, currentRole);
+                }
+                await _usermanager.AddToRoleAsync(user, role);
+               
+            }
+
             // Edits the customer from the Admins changes and then redirects back to the AdminPage
             return View("ChangesConfirmation");
         }
