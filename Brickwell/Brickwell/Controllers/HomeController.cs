@@ -2,6 +2,7 @@ using Brickwell.Data;
 using Brickwell.Infrastructure;
 using Brickwell.Models;
 using Brickwell.Models.ViewModels;
+using Elfie.Serialization;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -10,12 +11,16 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Microsoft.Extensions.Logging.Console;
 using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using System;
 using System.Data;
 using System.Diagnostics;
 using System.Net.Http;
+using System.Text;
 
 namespace Brickwell.Controllers
 {
+
     public class HomeController : Controller
     {
         private IBrickwellRepository _repo;
@@ -265,49 +270,81 @@ namespace Brickwell.Controllers
                 string orderJSON = JsonConvert.SerializeObject(orderDictionary);
                 string customerJSON = JsonConvert.SerializeObject(customerDictionary);
 
+                
+
                 // make the post request to the fraud endpoint
 
                 HttpClient client = new HttpClient();
 
-                Dictionary<string, string> values = new Dictionary<string, string>
+                Dictionary<string, Dictionary<string, dynamic>> body = new Dictionary<string, Dictionary<string, dynamic>>
                 {
-                    { "order_data", orderJSON },
-                    { "customer_data", customerJSON}
+                    { "order_data", new Dictionary<string, dynamic>
+                        {
+                            { "transaction_ID", 0 }, // This gets dropped.
+                            { "customer_ID", customer.customer_ID }, // This also gets dropped.
+                            { "date", DateTime.Now.ToString("MM/dd/yyyy") },
+                            { "day_of_week", DateTime.Now.ToString("dddd").Substring(0,3) },
+                            { "time", DateTime.Now.Hour },
+                            { "entry_mode", "CVC" },
+                            { "amount", cart.ComputeTotalSum() },
+                            { "type_of_transaction", "Online" },
+                            { "country_of_transaction", form["billing_country"] },
+                            { "shipping_address", form["country"] },
+                            { "bank", "drop" }, // This also gets dropped.
+                            { "type_of_card", "drop" } // This also gets dropped.
+                        }
+                    },
+                    { "customer_data", new Dictionary<string, dynamic>
+                        {
+                            { "customer_ID", customer.customer_ID }, // This still gets dropped.
+                            { "first_name", customer.first_name },
+                            { "last_name", customer.last_name },
+                            { "birth_date", customer.birth_date },
+                            { "country_of_residence", customer.country_of_residence },
+                            { "gender", customer.gender },
+                            { "age", customer.age }
+                        }
+                    }
                 };
-                FormUrlEncodedContent content = new FormUrlEncodedContent(values);
-                HttpResponseMessage response = await client.PostAsync("https://isitfraud.azurewebsites.net/api/isitfraud", content);
+
+                string JSONbody = JsonConvert.SerializeObject(body);
+                var httpContent = new StringContent(JSONbody, Encoding.UTF8, "application/json");
+
+                client.DefaultRequestHeaders.Add("x-functions-key", System.IO.File.ReadAllText(Directory.GetCurrentDirectory() + "/APIkey.txt"));
+                
+                HttpResponseMessage response = await client.PostAsync("https://isitfraud.azurewebsites.net/api/isitfraud", httpContent);
                 string responseString = await response.Content.ReadAsStringAsync();
 
-                Console.WriteLine(responseString);
+                dynamic fraudObj = JObject.Parse(responseString);
+
 
                 Order order = new Order() 
                 { 
                     customer_ID = orderDictionary["customer_ID"], 
                     Customer = customer,
-                    date = orderDictionary["date"],
+                    date = DateOnly.FromDateTime(DateTime.Now),
                     day_of_week = orderDictionary["day_of_week"],
-                    time = orderDictionary["time"],
+                    time = DateTime.Now.Hour,
                     amount = orderDictionary["amount"],
                     entry_mode = orderDictionary["entry_mode"],
                     type_of_transaction = orderDictionary["type_of_transaction"],
                     country_of_transaction = orderDictionary["country_of_transaction"],
-                    shipping_address = orderDictionary["shipping_address"]
-
+                    shipping_address = orderDictionary["shipping_address"],
+                    fraud = fraudObj.fraud
                 };
 
-
-                //ViewBag.OrderData = orderDictionary;
-                if (true)
+                _repo.AddOrder(order);
+                
+                if (fraudObj.fraud == 0)
                 {
                     cart.Clear();
                     return View("OrderConfirmation");
                 }
-                else
+                else 
                 {
                     cart.Clear();
                     return RedirectToAction("OrderReview");
                 }
-
 
             }
             
