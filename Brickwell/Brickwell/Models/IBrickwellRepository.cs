@@ -26,6 +26,8 @@ namespace Brickwell.Models
         public void RemoveRecommendation(ProductRecommendation Recommendation);
         public void UpdateRecommendation(ProductRecommendation Recommendation);
 
+        public void AddOrder(Order Order);
+
 
     }
 }

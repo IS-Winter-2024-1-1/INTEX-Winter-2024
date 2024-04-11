@@ -74,5 +74,11 @@ namespace Brickwell.Models
             _context.Update(Recommendation);
             _context.SaveChanges();
         }
+
+        public void AddOrder(Order Order)
+        {
+            _context.Add(Order);
+            _context.SaveChanges();
+        }
     }
 }
