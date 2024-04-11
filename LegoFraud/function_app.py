@@ -17,47 +17,45 @@ def isitfraud(req: func.HttpRequest) -> func.HttpResponse:
             status_code=500
         )
     #########################
-    import pickle 
     import pandas as pd
 
-    def date_function(df, column_to_date):
-        #import the proper packages
-        #from datetime import datetime
-        #import calendar
-        import pandas as pd
-
-        #cast the column to the data type of a date
-        df[column_to_date] = pd.to_datetime(df[column_to_date])
-
-        #make 3 new columns(day of the month, month of the year, and year)
-
-        df['day_of_month'] = df[column_to_date].dt.day
-
-        df['month_of_year'] = df[column_to_date].dt.month
-
-        df['year'] = df[column_to_date].dt.year
-        
-        df['day_of_month'] = df['day_of_month'].astype(str)
-        df['month_of_year'] = df['month_of_year'].astype(str)
-        df['year'] = df['year'].astype(str)
-
-        #drop the original date column
-        df.drop(columns = column_to_date, inplace = True)
-
-        return df
-    
     def load_pickle(file_name):
         import pickle
         model = pickle.load(open(file_name, "rb"))
         return model
 
+    def preprocess_data(data_dict):
+        # Extract order data and customer data from the big dictionary
+        order_data = data_dict['order_data']
+        customer_data = data_dict['customer_data']
 
-    # test_dictionary = {
+        # Convert order dictionary to DataFrame
+        order_df = pd.DataFrame([order_data])
+
+        # Convert customer dictionary to DataFrame
+        customer_df = pd.DataFrame([customer_data])
+
+        # Merge order and customer DataFrames on customer_ID
+        merged_df = pd.merge(order_df, customer_df, on='customer_ID')
+
+        # Create binary indicators for country_of_transaction and shipping_address
+        merged_df['country_of_transaction_United Kingdom'] = (merged_df['country_of_transaction'] == 'United Kingdom').astype(int)
+        merged_df['shipping_address_United Kingdom'] = (merged_df['shipping_address'] == 'United Kingdom').astype(int)
+        merged_df['country_of_residence_United Kingdom'] = (merged_df['country_of_residence'] == 'United Kingdom').astype(int)
+
+        # Drop unnecessary columns
+        merged_df.drop(columns=['transaction_ID','customer_ID', 'date','birth_date', 'entry_mode', 'type_of_transaction', 'bank', 'type_of_card', 'country_of_transaction', 'shipping_address', 'country_of_residence', 'first_name', 'last_name', 'gender', 'age', 'day_of_week'], inplace=True)
+
+        return merged_df
+
+    # Test the function with example data
+    # data_dict = {
+    #     "order_data": {
     #         "transaction_ID": 100006,
     #         "customer_ID": 1,
     #         "date": '11/9/2023',
     #         "day_of_week": 'Wed',
-    #         "time": 24,
+    #         "time": 23,
     #         "entry_mode": 'CVC',
     #         "amount": 20,
     #         "type_of_transaction": 'Online',
@@ -65,41 +63,23 @@ def isitfraud(req: func.HttpRequest) -> func.HttpResponse:
     #         "shipping_address": 'India',
     #         "bank": 'Barclays',
     #         "type_of_card": 'Visa'
+    #     },
+    #     "customer_data": {
+    #         "customer_ID": 1,
+    #         "first_name": "William",
+    #         "last_name": "Turner",
+    #         "birth_date": '1995-07-03',
+    #         "country_of_residence": "United Kingdom",
+    #         "gender": "M",
+    #         "age": 25.2
     #     }
+    # }
 
-    df_test = pd.DataFrame([req_body])
+    preprocessed_data = preprocess_data(req_body)
+    model = load_pickle('lego_fraud2.sav')
+    prediction = model.predict(preprocessed_data)[0]
 
-    columns_to_drop = ['transaction_ID', 'customer_ID']
-
-    df_test.drop(columns = columns_to_drop, inplace = True)
-
-    df_test = date_function(df_test, 'date')
-
-    more_columns_to_drop = ['day_of_week', 'entry_mode', 'type_of_transaction', 'bank', 'type_of_card','day_of_month',
-                            'month_of_year', 'year']
-
-    df_test.drop(columns = more_columns_to_drop, inplace = True)
-
-    columns_mapping = {
-        'country_of_transaction': 'country_of_transaction_United Kingdom',
-        'shipping_address': 'shipping_address_United Kingdom'
-    }
-
-    df_test = df_test.rename(columns=columns_mapping)
-
-    df_test['country_of_transaction_United Kingdom'] = df_test['country_of_transaction_United Kingdom'] == 'United Kingdom'
-
-    df_test['shipping_address_United Kingdom'] = df_test['shipping_address_United Kingdom'] == 'United Kingdom'
-
-        
-    saved_model_path = "lego_fraud.sav"
-    loaded_model = load_pickle(saved_model_path)
-
-    prediction = loaded_model.predict(df_test)[0]
-
-    
-
-
+   
     #########################
 
     return func.HttpResponse(
