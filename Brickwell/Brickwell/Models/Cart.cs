@@ -5,7 +5,7 @@
         public string ReturnUrl { get; set; } = "/";
         public List<CartLine> Lines { get; set; } = new List<CartLine>();
 
-        public void AddItem(Product prod, int quantity)
+        public virtual void AddItem(Product prod, int quantity)
         {
             CartLine? line = Lines
                 .Where(x => x.Product.product_ID == prod.product_ID)
@@ -27,11 +27,11 @@
         }
 
         // Remove a product from the cart.
-        public void RemoveLine(Product prod) =>
+        public virtual void RemoveLine(Product prod) =>
             Lines.RemoveAll(x => x.Product.product_ID == prod.product_ID);
 
         // Clear the cart.
-        public void Clear() => Lines.Clear();
+        public virtual void Clear() => Lines.Clear();
 
         // Compute the total sum of the cart.
         public decimal ComputeTotalSum() =>
