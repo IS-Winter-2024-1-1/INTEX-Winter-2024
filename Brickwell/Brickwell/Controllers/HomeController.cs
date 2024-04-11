@@ -97,10 +97,10 @@ namespace Brickwell.Controllers
         }
 
         [HttpGet]
-        public IActionResult Products(int pageNum, string? productType, string? productColor)
+        public IActionResult Products(int pageNum, string? productType, string? productColor, int pageSize = 5)
         {
             {
-                int pageSize = 5;
+                
 
                 var skipAmount = pageSize * (pageNum - 1);
                 if (skipAmount < 0)
@@ -130,6 +130,11 @@ namespace Brickwell.Controllers
                     
                     CurrentProductType = productType
                 };
+
+                ViewBag.CurrentProductType = productType;
+                ViewBag.CurrentProductColor = productColor;
+                ViewBag.pageSize = pageSize;
+
                 return View(stuff);
             }
         }

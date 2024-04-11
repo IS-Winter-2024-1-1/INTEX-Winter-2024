@@ -4,6 +4,8 @@ using Microsoft.AspNetCore.Mvc.Routing;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Razor.TagHelpers;
+using Microsoft.AspNetCore.WebUtilities;
+using Microsoft.AspNetCore.Http.Extensions;
 
 namespace Brickwell.Infrastructure
 {
@@ -67,18 +69,48 @@ namespace Brickwell.Infrastructure
         {
             TagBuilder tag = new TagBuilder("li");
             tag.Attributes["class"] = "page-item";
-            TagBuilder anchorTag = new TagBuilder("a");
-            anchorTag.Attributes["href"] = urlHelper.Action(PageAction, new { pageNum = pageNumber });
-            anchorTag.Attributes["class"] = "page-link";
-            anchorTag.InnerHtml.Append(pageNumber.ToString());
-            if (!string.IsNullOrEmpty(label))
+
+            // Get the absolute URL of the current request
+            var currentUrl = urlHelper.ActionContext.HttpContext.Request.GetEncodedUrl();
+
+            // Parse the URL
+            if (Uri.TryCreate(currentUrl, UriKind.Absolute, out Uri? uri))
             {
-                anchorTag.InnerHtml.Append(" ");
-                anchorTag.InnerHtml.Append(label);
+                // Parse the query string from the current URL
+                var query = Microsoft.AspNetCore.WebUtilities.QueryHelpers.ParseQuery(uri.Query);
+
+                // Add or update the 'pageNum' parameter for pagination
+                query["pageNum"] = pageNumber.ToString();
+
+                TagBuilder anchorTag = new TagBuilder("a");
+
+                // Rebuild the URL with updated query parameters
+                var newUri = QueryHelpers.AddQueryString(uri.AbsoluteUri.Split('?')[0], query.ToDictionary(kv => kv.Key, kv => kv.Value.ToString()));
+                anchorTag.Attributes["href"] = newUri;
+
+                anchorTag.Attributes["class"] = "page-link";
+                anchorTag.InnerHtml.Append(pageNumber.ToString());
+
+                if (!string.IsNullOrEmpty(label))
+                {
+                    anchorTag.InnerHtml.Append(" ");
+                    anchorTag.InnerHtml.Append(label);
+                }
+
+                tag.InnerHtml.AppendHtml(anchorTag);
             }
-            tag.InnerHtml.AppendHtml(anchorTag);
+            else
+            {
+                // Handle the case where the URL is invalid
+                // For example, log an error or throw an exception
+            }
+
             return tag;
         }
+
+
+
+
 
         private TagBuilder CreateEllipsis()
         {
