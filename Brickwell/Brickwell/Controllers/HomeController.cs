@@ -96,7 +96,7 @@ namespace Brickwell.Controllers
         public IActionResult Products(int pageNum, string? productType, string? productColor)
         {
             {
-                int pageSize = 9;
+                int pageSize = 5;
 
                 var skipAmount = pageSize * (pageNum - 1);
                 if (skipAmount < 0)
@@ -116,8 +116,12 @@ namespace Brickwell.Controllers
                     {
                         CurrentPage = pageNum,
                         ItemsPerPage = pageSize,
-                        TotalItems = productType == null ? 
-                            _repo.Products.Count() : _repo.Products.Where(x => x.category == productType).Count()
+                        TotalItems = (productType == null && productColor == null) ? 
+                            _repo.Products.Count() :
+                            (productType != null && productColor != null) ?
+                                _repo.Products.Count(x => x.category == productType && x.primary_color == productColor) :
+                                (productType != null) ? _repo.Products.Count(x => x.category == productType) : _repo.Products.Count(x => x.primary_color == productColor)
+
                     },
                     
                     CurrentProductType = productType
