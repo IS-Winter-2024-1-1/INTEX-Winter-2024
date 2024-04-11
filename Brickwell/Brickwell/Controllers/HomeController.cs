@@ -171,12 +171,14 @@ namespace Brickwell.Controllers
         }
 
         [HttpGet]
-        public IActionResult Checkout()
+        public IActionResult Checkout(string returnUrl)
         {
             // check the user credentials in the database
             //Log in or reject and redirect to index page
             // send the checkout page
-            return View();
+            cart.ReturnUrl = returnUrl ?? "/";
+            // send the cart page
+            return View(cart);
         }
 
         [HttpPost]

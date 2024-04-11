@@ -46,6 +46,7 @@ else
     </table>
     <h3>Total: @Model.ComputeTotalSum().ToString("C")</h3>
     <form method="get" asp-controller="Home" asp-action="Checkout">
+        <input type="hidden" name="returnUrl" value="@Model?.ReturnUrl" />
         <button type="submit">Checkout</button>
     </form>
     <div>
