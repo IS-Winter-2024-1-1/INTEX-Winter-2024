@@ -15,12 +15,20 @@
                 <div class="fs-5 mb-5">
                     <span>$@Model.Product.price</span>
                 </div>
-                <p class="lead">@Model.Product.description</p>
+                <!-- Product description (scrollable area) -->
+                <div class="product-description mt-3" style="max-height: 100px; overflow-y: auto;">
+                    <p>
+                        <!-- Add your product description here -->
+                        @Model.Product.description
+                    </p>
+                </div>
                 <div class="d-flex">
                     <form id="@Model.Product.product_ID" asp-controller="Home" asp-action="AddToCart" method="post">
                         <input type="hidden" name="product_ID" value="@Model.Product.product_ID" />
                         <input type="hidden" name="returnURL" value="@ViewContext.HttpContext.Request.PathAndQuery()" />
                         <input class="form-control text-center me-3" id="inputQuantity" name="quantity" type="number" value="1" style="max-width: 3rem" />
+                        <br/>
+                        <br/>
                         <button class="btn btn-outline-dark flex-shrink-0" type="submit">
                             <i class="bi-cart-fill me-1"></i>
                             Add to cart
