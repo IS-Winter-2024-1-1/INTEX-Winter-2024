@@ -6,6 +6,8 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
+using Microsoft.Extensions.Logging.Console;
 using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
 using System.Data;
@@ -177,6 +179,7 @@ namespace Brickwell.Controllers
         }
 
         [HttpGet]
+        [Authorize]
         public IActionResult Checkout(string returnUrl)
         {
             //Get countries from the database
@@ -192,7 +195,8 @@ namespace Brickwell.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Checkout(Order order)
+        [Authorize]
+        public async Task<IActionResult> Checkout(IFormCollection form)
         {
             //get current user  
             var currentuser = await _usermanager.FindByNameAsync(User.Identity.Name);
@@ -209,37 +213,36 @@ namespace Brickwell.Controllers
             }
             else
             {
+                Customer customer = customerList.First();
 
-
-                Dictionary<string, dynamic> customerDictionary = new Dictionary<string, dynamic>
-                {
-                    { "transaction_ID", 0 }, // This gets dropped.
-                    { "customer_ID", 0 }, // This also gets dropped.
-                    { "date", "4" },
-                    { "day_of_week", "4" },
-                    { "time", "4" },
-                    { "entry_mode", "4" },
-                    { "amount", "4" },
-                    { "type_of_transaction", "4" },
-                    { "country_of_transaction", "4" },
-                    { "shipping_address", "4" },
-                    { "bank", "4" },
-                    { "type_of_card", "4" }
-                };
                 Dictionary<string, dynamic> orderDictionary = new Dictionary<string, dynamic>
                 {
-                    { "customer_ID", 0 }, // This still gets dropped.
-                    { "first_name", "4" },
-                    { "last_name", "4" },
-                    { "birth_date", "4" },
-                    { "country_of_residence", "4" },
-                    { "gender", "4" },
-                    { "age", "4" }
+                    { "transaction_ID", 0 }, // This gets dropped.
+                    { "customer_ID", customer.customer_ID }, // This also gets dropped.
+                    { "date", DateTime.Now.ToString("MM/dd/yyyy") },
+                    { "day_of_week", DateTime.Now.ToString("dddd").Substring(0,3) },
+                    { "time", DateTime.Now.ToString("HH") },
+                    { "entry_mode", "CVC" },
+                    { "amount", form["amount"] },
+                    { "type_of_transaction", "Online" },
+                    { "country_of_transaction", form["country"] },
+                    { "shipping_address", form["address"] }, 
+                    { "bank", "drop" }, // This also gets dropped.
+                    { "type_of_card", "drop" } // This also gets dropped.
+                };
+                Dictionary<string, dynamic> customerDictionary = new Dictionary<string, dynamic>
+                {
+                    { "customer_ID", customer.customer_ID }, // This still gets dropped.
+                    { "first_name", customer.first_name },
+                    { "last_name", customer.last_name },
+                    { "birth_date", customer.birth_date },
+                    { "country_of_residence", customer.country_of_residence },
+                    { "gender", customer.gender },
+                    { "age", customer.age }
                 };
                 
-
-                string customerJSON = JsonConvert.SerializeObject(customerDictionary);
                 string orderJSON = JsonConvert.SerializeObject(orderDictionary);
+                string customerJSON = JsonConvert.SerializeObject(customerDictionary);
 
                 // make the post request to the fraud endpoint
 
@@ -254,7 +257,7 @@ namespace Brickwell.Controllers
                 HttpResponseMessage response = await client.PostAsync("https://isitfraud.azurewebsites.net/api/isitfraud", content);
                 string responseString = await response.Content.ReadAsStringAsync();
 
-                
+                Console.WriteLine(responseString);
 
                 return View();
             }
@@ -263,6 +266,61 @@ namespace Brickwell.Controllers
 
             
         }
+
+
+
+
+
+
+
+        
+        // Add customer (self-service).
+        [HttpGet]
+        public IActionResult SSAddCustomer()
+        {
+            
+
+            // send the 
+            return View("SSEditCustomer");
+        }
+
+        [HttpPost]
+        public IActionResult SSAddCustomer(Customer newCustomer)
+        {
+            _repo.AddCustomer(newCustomer);
+            // Adds the 
+            return RedirectToAction("Cart");
+        }
+
+        // Update Customer (self-service).
+        [HttpGet]
+        public IActionResult SSEditCustomer(int id)
+        {
+            Customer customer = _repo.Customers.FirstOrDefault(c => c.customer_ID == id);
+
+            
+
+            
+            // send the 
+            return View(customer);
+        }
+
+        // Update Customer for self-service.
+        [HttpPost]
+        public IActionResult SSEditCustomer(Customer customer)
+        {
+            _repo.UpdateCustomer(customer);
+            // 
+            return View("ChangesConfirmation");
+        }
+
+
+
+
+
+
+
+
 
         [HttpGet]
         public IActionResult OrderConfirmation()

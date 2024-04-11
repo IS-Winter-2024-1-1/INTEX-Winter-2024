@@ -2,7 +2,7 @@
     For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 *@
 @{
-    ViewData["Title"] = "Edit Customer";
+    ViewData["Title"] = "My Info";
 }
 
 @model Customer
@@ -37,22 +37,6 @@
     <label asp-for="age">Age:</label><br>
     <input required asp-for="age" type="number" id="age" name="age"><br>
 
-    <label>Role:</label><br>
-    @if (ViewBag.CurrentlyEditingRole == "Customer" || ViewBag.CurrentlyEditingRole == "Admin")
-    {
-        <select id="role" name="role"><br>
-            <option value="Customer">Customer</option>
-            <option value="Admin">Admin</option>
-        </select>
-    }
-    else
-    {
-        <select id="role" name="role">
-            <br>
-            <option value="Account Not Found" selected disabled>Account Not Found</option>
-        </select>
-    }
-
     <br>
-    <input type="submit" value="Save" class="btn btn-primary">
+    <input type="submit" onclick="return confirm('Are you sure you want to save changes to your account information?')"value="Save" class="btn btn-primary">
 </form>
