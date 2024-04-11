@@ -1,0 +1,46 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+    ViewData["Title"] = "Your Cart";
+}
+
+@model Cart
+
+<h1>@ViewData["Title"]</h1>
+
+@if (Model.Lines.Count() == 0)
+{
+    <h3>Your cart is empty.</h3>
+}
+else
+{
+    <table>
+        <thead>
+            <tr>
+                <th>Product</th>
+                <th>Quantity</th>
+                <th>Price</th>
+                <th>Subtotal</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.Lines)
+            {
+                <tr>
+                    <td>@item.Product.name</td>
+                    <td>@item.Quantity</td>
+                    <td>@item.Product.price.ToString("C")</td>
+                    <td>@((item.Product.price * item.Quantity).ToString("C"))</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <h3>Total: @Model.ComputeTotalSum().ToString("C")</h3>
+    <form method="post" action="Checkout">
+        <button type="submit">Checkout</button>
+    </form>
+    <div>
+        <a class="btn btn-primary" href="@Model.ReturnUrl">Continue Shopping</a>
+    </div>
+}

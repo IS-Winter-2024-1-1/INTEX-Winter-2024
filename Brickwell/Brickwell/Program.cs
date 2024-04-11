@@ -80,6 +80,9 @@ builder.Services.AddHsts(options =>
     // options.ExcludedHosts.Add("www.example.com");
 });
 
+builder.Services.AddDistributedMemoryCache();
+builder.Services.AddSession();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -96,6 +99,8 @@ else
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
+
+app.UseSession();
 
 app.Use(async (ctx, next) =>
 {
