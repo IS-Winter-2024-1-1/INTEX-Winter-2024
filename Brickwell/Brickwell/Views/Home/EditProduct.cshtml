@@ -8,7 +8,7 @@
 
 <h1>@ViewData["Title"]</h1>
 
-<form method="post">
+<form method="post" id="submissionForm">
     <input asp-for="product_ID" hidden><br>
 
     <label asp-for="name">Name:</label><br>
@@ -48,7 +48,11 @@
         }
     </select><br>
 
-
+    
     <br>
-    <input type="submit" value="Save" class="btn btn-primary" onclick="return confirm('Are you sure you want to edit the @Model.name?')">
+    <button type="button" class="btn btn-primary" onclick="confirmSubmit()">Save Changes</button>
+    
 </form>
+<script src="~/js/confirmSubmit.js"></script>
+    
+
