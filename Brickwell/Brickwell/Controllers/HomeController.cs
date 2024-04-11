@@ -18,15 +18,20 @@ namespace Brickwell.Controllers
         private readonly UserManager<ApplicationUser> _usermanager;
         private readonly RoleManager<ApplicationRole> _roleManger;
 
+        // Create Cart for the session here
+        public Cart cart { get; set; }
+
         public HomeController(IBrickwellRepository temp,
                                 UserManager<ApplicationUser> userManager,
                                 RoleManager<ApplicationRole> roleManager,
-                                ApplicationDbContext applicationDbContext)
+                                ApplicationDbContext applicationDbContext,
+                                Cart cartService)
         {
             _repo = temp;
             _dbcontext = applicationDbContext;
             _usermanager = userManager;
             _roleManger = roleManager;
+            cart = cartService;
         }
 
 
@@ -128,10 +133,7 @@ namespace Brickwell.Controllers
             };
             return View(productDetailed);
         }
-
-        // Create Cart for the session here
-        public Cart? cart { get; set; } 
-        
+    
 
         [HttpPost]
         public IActionResult AddToCart(int product_ID, string returnUrl, int quantity)
@@ -141,9 +143,7 @@ namespace Brickwell.Controllers
 
             if (product != null)
             {
-                cart = HttpContext.Session.GetJson<Cart>("cart") ?? new Cart();
                 cart.AddItem(product, quantity);
-                HttpContext.Session.SetJson("cart", cart);
             }
 
             // add the product to the cart session and then send the cart page
@@ -154,10 +154,18 @@ namespace Brickwell.Controllers
         public IActionResult Cart(string returnUrl)
         {
             
-            cart = HttpContext.Session.GetJson<Cart>("cart") ?? new Cart();
             cart.ReturnUrl = returnUrl ?? "/";
             // send the cart page
             return View(cart);
+        }
+
+        [HttpPost]
+        public IActionResult RemoveFromCart(int product_ID, string returnUrl)
+        {
+            cart.RemoveLine(cart.Lines.First(x => x.Product.product_ID == product_ID).Product);
+
+            // remove the product from the cart session and then send the cart page
+            return RedirectToAction("Cart", new {returnUrl = returnUrl});
         }
 
         [HttpGet]
