@@ -184,7 +184,6 @@ namespace Brickwell.Controllers
         {
             //Get countries from the database
             ViewBag.countries = _repo.Orders.Select(x => x.shipping_address).Distinct().OrderBy(x => x).ToList();
-            ViewBag.banks = _repo.Orders.Select(x => x.bank).Distinct().OrderBy(x => x).ToList();
             ViewBag.cardTypes = _repo.Orders.Select(x => x.type_of_card).Distinct().OrderBy(x => x).ToList();
             // check the user credentials in the database
             //Log in or reject and redirect to index page
