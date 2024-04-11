@@ -9,7 +9,7 @@
 
 <h1>@ViewData["Title"]</h1>
 
-<form method="post">
+<form method="post" asp-route-extra="">
     <input asp-for="customer_ID" hidden><br>
 
     <label asp-for="username">Username:</label><br>
@@ -38,7 +38,20 @@
     <input required asp-for="age" type="number" id="age" name="age"><br>
 
     <label>Role:</label><br>
-    <input type="text" id="role" name="role"><br>
+    @if (ViewBag.CurrentlyEditingRole == "Customer" || ViewBag.CurrentlyEditingRole == "Admin")
+    {
+        <select id="role" name="role"><br>
+            <option value="Customer">Customer</option>
+            <option value="Admin">Admin</option>
+        </select>
+    }
+    else
+    {
+        <select id="role" name="role">
+            <br>
+            <option value="Account Not Found" selected disabled>Account Not Found</option>
+        </select>
+    }
 
     <br>
     <input type="submit" value="Save" class="btn btn-primary">
