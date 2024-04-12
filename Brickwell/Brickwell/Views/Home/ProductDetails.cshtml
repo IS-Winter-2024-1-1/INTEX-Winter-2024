@@ -1,9 +1,10 @@
 @using Brickwell.Infrastructure
+@model ProductDetailsViewModel
 @{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = Model.Product.name;
 }
 
-@model ProductDetailsViewModel
+
 
 <section class="py-5">
     <div class="container px-4 px-lg-5 my-5">
