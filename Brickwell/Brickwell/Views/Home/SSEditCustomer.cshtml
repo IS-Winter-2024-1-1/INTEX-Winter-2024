@@ -22,7 +22,12 @@
     <input required asp-for="birth_date" type="date" id="birth_date" name="birth_date"><br>
 
     <label asp-for="country_of_residence">Country of Residence:</label><br>
-    <input required asp-for="country_of_residence" type="text" id="country_of_residence" name="country_of_residence"><br>
+    <select required asp-for="country_of_residence" id="country_of_residence" name="country_of_residence">
+        @foreach (var country in ViewBag.countries)
+        {
+            <option value="@country">@country</option>
+        }
+    </select>
 
     <label asp-for="gender">Gender:</label><br />
     <select required asp-for="gender" id="gender" name="gender">

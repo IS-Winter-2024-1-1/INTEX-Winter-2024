@@ -75,7 +75,12 @@
                   <option value="">Choose...</option>
                   @foreach (var country in ViewBag.Countries)
                   {
-                      <option value="@country">@country</option>
+                      if (country != null)
+                      {
+                        <option value="@country">@country</option>
+                      }
+                      
+                      
                   }
                 </select>
                 <div class="invalid-feedback">
@@ -106,7 +111,10 @@
                             <option value="">Choose...</option>
                             @foreach (var country in ViewBag.Countries)
                             {
-                                <option value="@country">@country</option>
+                                if (country != null)
+                                {
+                                    <option value="@country">@country</option>
+                                }
                             }
                         </select>
                         <div class="invalid-feedback">
@@ -123,10 +131,13 @@
                 <label for="paymentMethod">Card Type</label>
                 @foreach (var card in ViewBag.cardTypes)
                 {
-                    <div class="custom-control custom-radio">
-                        <input id="@card" name="paymentMethod" type="radio" class="custom-control-input" required="">
-                        <label class="custom-control-label" for="@card">@card</label>
-                    </div>
+                    if (card != null)
+                        {
+                            <div class="custom-control custom-radio">
+                                <input id="@card" name="paymentMethod" type="radio" class="custom-control-input" required="">
+                                <label class="custom-control-label" for="@card">@card</label>
+                            </div>
+                        }
                 }
             </div>
             <div class="row">
