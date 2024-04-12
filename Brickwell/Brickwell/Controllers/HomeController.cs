@@ -292,7 +292,6 @@ namespace Brickwell.Controllers
             }
             else
             {
-
                 //Get countries from the database
                 ViewBag.countries = _repo.Orders.Select(x => x.shipping_address).Distinct().OrderBy(x => x).ToList();
                 ViewBag.cardTypes = _repo.Orders.Select(x => x.type_of_card).Distinct().OrderBy(x => x).ToList();
