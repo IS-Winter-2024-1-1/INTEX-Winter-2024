@@ -49,7 +49,7 @@
                     <td>@role</td>
                     <td>
                         <a class="btn btn-primary" asp-controller="Home" asp-action="EditCustomer" asp-route-id="@customer.customer_ID">Edit</a>
-                        <button type="button" class="btn btn-danger" onclick="confirmSubmit()" asp-controller="Home" asp-action="DeleteCustomer" asp-route-id="@customer.customer_ID">Delete</button>
+                        <button type="button" class="btn btn-danger" id="confirmSubmitButton" asp-controller="Home" asp-action="DeleteCustomer" asp-route-id="@customer.customer_ID">Delete</button>
                     </td>
                 </tr>
                 }
