@@ -442,7 +442,7 @@ namespace Brickwell.Controllers
         [Authorize]
         public IActionResult SSAddCustomer()
         {
-            
+            ViewBag.countries = _repo.Orders.Select(x => x.shipping_address).Distinct().OrderBy(x => x).ToList();
 
             // send the 
             return View("SSEditCustomer");
