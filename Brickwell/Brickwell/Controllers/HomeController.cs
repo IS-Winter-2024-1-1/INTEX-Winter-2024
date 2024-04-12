@@ -111,48 +111,13 @@ namespace Brickwell.Controllers
             return View();
         }
 
-        [Authorize(Roles = "Admin")]
-        public async Task<IActionResult> Test()
-        {
-            if (User.Identity.IsAuthenticated)
-            {
-                //get current user  
-                var currentuser = await _usermanager.FindByNameAsync(User.Identity.Name);
-                //query the userrole table  
-                //required using Microsoft.EntityFrameworkCore;  
-                var userrole = _dbcontext.ApplicationUserRoles.Include(c => c.User).Include(c => c.Role).Where(c => c.UserId == currentuser.Id).FirstOrDefault();
-                var user = userrole.User;
-                var role = userrole.Role;
+       
 
-                ViewBag.user = new { myUserRole = userrole, 
-                                     myUser = user,
-                                     myRole = role};
-
-            }
-
-            return View();
-        }
-
-        //[Authorize(Roles = "Admin")]
         public IActionResult Privacy()
         {
             return View();
         }
 
-        [HttpGet]
-        public IActionResult Login() 
-        {
-            // send the login page
-            return View();
-        }
-
-        [HttpPost]
-        public IActionResult Login(string x)
-        {
-            // check the user credentials in the database
-            //Log in or reject and redirect to index page
-            return View();
-        }
 
         [HttpGet]
         public IActionResult Products(int pageNum, string? productType, string? productColor, int pageSize = 5)
@@ -425,7 +390,7 @@ namespace Brickwell.Controllers
                 else 
                 {
                     cart.Clear();
-                    return RedirectToAction("OrderReview", order);
+                    return View("OrderReview", order);
                 }
 
             }
@@ -447,6 +412,7 @@ namespace Brickwell.Controllers
         }
 
         [HttpPost]
+        [Authorize]
         public IActionResult SSAddCustomer(Customer newCustomer)
         {
             newCustomer.username = User.Identity.Name;
@@ -457,6 +423,7 @@ namespace Brickwell.Controllers
 
         // Update Customer (self-service).
         [HttpGet]
+        [Authorize]
         public IActionResult SSEditCustomer(int id)
         {
             Customer customer = _repo.Customers.FirstOrDefault(c => c.customer_ID == id);
@@ -470,6 +437,7 @@ namespace Brickwell.Controllers
 
         // Update Customer for self-service.
         [HttpPost]
+        [Authorize]
         public IActionResult SSEditCustomer(Customer customer)
         {
             _repo.UpdateCustomer(customer);
@@ -479,29 +447,10 @@ namespace Brickwell.Controllers
 
 
 
-
-
-
-
-
-
-        [HttpGet]
-        public IActionResult OrderConfirmation()
-        {
-            // send the order confirmation page if not fraud otherwise redirect to the OrderReview page
-            return View();
-        }
-
-        [HttpGet]
-        public IActionResult OrderReview()
-        {
-            // send the order review notification page to the customer
-            return View();
-        }
-
         //From here on it should be mostly Admin actions
 
         [HttpGet]
+        [Authorize(Roles = "Admin")]
         public IActionResult AdminPage()
         {
             var tenOrders = new OrderListViewModel()
@@ -513,6 +462,7 @@ namespace Brickwell.Controllers
 
         // List Fraud Orders for Admin
         [HttpGet]
+        [Authorize(Roles = "Admin")]
         public IActionResult ListOrders(int pageNum)
         {
             // grabs all the orders that are considered fraud and puts them in order of most recent to oldest.
@@ -553,6 +503,7 @@ namespace Brickwell.Controllers
 
         // List all Products for Admin
         [HttpGet]
+        [Authorize(Roles = "Admin")]
         public IActionResult ListProducts(int pageNum)
         {
             int pageSize = 9;
@@ -583,6 +534,7 @@ namespace Brickwell.Controllers
 
         // Edit Product for Admin
         [HttpGet]
+        [Authorize(Roles = "Admin")]
         public IActionResult EditProduct(int id)
         {
             Product product = _repo.Products.FirstOrDefault(p => p.product_ID == id);
@@ -600,6 +552,7 @@ namespace Brickwell.Controllers
 
         // Update Product for Admin
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         public IActionResult EditProduct(Product product)
         {
             _repo.UpdateProduct(product);
@@ -609,6 +562,7 @@ namespace Brickwell.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "Admin")]
         public IActionResult AddProduct()
         {
             var uniqueCategories = _repo.Products
@@ -624,6 +578,7 @@ namespace Brickwell.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         public IActionResult AddProduct(Product newProduct)
         {
             _repo.AddProduct(newProduct);
@@ -632,6 +587,7 @@ namespace Brickwell.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         public IActionResult DeleteProduct(Product product)
         {
             _repo.RemoveProduct(product);
@@ -640,7 +596,7 @@ namespace Brickwell.Controllers
         }
 
         [HttpGet]
-        [Authorize]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> ListCustomers(int pageNum)
         {
             int pageSize = 20;
@@ -682,6 +638,7 @@ namespace Brickwell.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "Admin")]
         public IActionResult EditCustomer(int id)
         {
             Customer customer = _repo.Customers.FirstOrDefault(c => c.customer_ID == id);
@@ -705,6 +662,7 @@ namespace Brickwell.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> EditCustomer(Customer customer, IFormCollection form)
         {
             _repo.UpdateCustomer(customer);
@@ -729,6 +687,7 @@ namespace Brickwell.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         public IActionResult DeleteCustomer(Customer customer)
         {
             _repo.RemoveCustomer(customer);
@@ -737,6 +696,7 @@ namespace Brickwell.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "Admin")]
         public IActionResult AddCustomer()
         {
             // send the add customer page which is only accessible by the admin
@@ -744,6 +704,7 @@ namespace Brickwell.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         public IActionResult AddCustomer(Customer customer)
         {
             _repo.AddCustomer(customer);
