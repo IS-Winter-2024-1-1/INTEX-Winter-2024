@@ -75,7 +75,7 @@
                   <option value="">Choose...</option>
                   @foreach (var country in ViewBag.Countries)
                   {
-                      if (country != null)
+                      if (country != null && country != "")
                       {
                         <option value="@country">@country</option>
                       }
@@ -111,7 +111,7 @@
                             <option value="">Choose...</option>
                             @foreach (var country in ViewBag.Countries)
                             {
-                                if (country != null)
+                                if (country != null && country != "")
                                 {
                                     <option value="@country">@country</option>
                                 }
@@ -131,7 +131,7 @@
                 <label for="paymentMethod">Card Type</label>
                 @foreach (var card in ViewBag.cardTypes)
                 {
-                    if (card != null)
+                    if (card != null && card != "")
                         {
                             <div class="custom-control custom-radio">
                                 <input id="@card" name="paymentMethod" type="radio" class="custom-control-input" required="">
