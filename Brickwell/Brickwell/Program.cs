@@ -111,7 +111,7 @@ app.Use(async (ctx, next) =>
                                 "default-src 'self';" +
                                 "connect-src 'self';" +
                                 "script-src 'self' 'sha256-m1igTNlg9PL5o60ru2HIIK6OPQet2z9UgiEAhCyg/RU=' 'sha256-fIkC4b4crvv6N/++kl5qCd/nhTe0/JC7KANDL3YeODw=' 'sha256-w77ktvJB3FybpHrTd4ooqbairmYaAaYtYtuhBeiorvc=' 'sha256-9GlY3b6hPAM+8e87VxZOLd7mBlAQNTn31WsGviLLncc=' 'sha256-JE2J1ZcmHHspDIcaYOlWNACJ2bhnE6shsG8EeIBNOCw=' 'sha256-m1igTNlg9PL5o60ru2HIIK6OPQet2z9UgiEAhCyg/RU=' https://cdnjs.cloudflare.com https://code.jquery.com;" +
-                                "img-src 'self' http://www.w3.org https://live.staticflickr.com/65535/;" +
+                                "img-src 'self' http://www.w3.org http://www.w3.org/2000/svg https://live.staticflickr.com/65535/;" +
                                 "style-src 'self' 'unsafe-inline';") ;
     await next();
 });
