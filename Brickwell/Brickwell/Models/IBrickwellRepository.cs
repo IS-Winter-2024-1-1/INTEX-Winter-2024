@@ -15,6 +15,8 @@ namespace Brickwell.Models
         IQueryable<ProductRecommendation> ProductRecommendations { get; }
         IQueryable<CustomerRecommendation> CustomerRecommendations { get; }
 
+        IQueryable<Favorite> Favorites { get; }
+
         public void AddProduct(Product Product);
         public void RemoveProduct(Product Product);
         public void UpdateProduct(Product Product);

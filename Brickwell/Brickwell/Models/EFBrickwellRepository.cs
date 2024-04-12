@@ -23,6 +23,8 @@ namespace Brickwell.Models
 
         public IQueryable<CustomerRecommendation> CustomerRecommendations => _context.CustomerRecommendations;
 
+        public IQueryable<Favorite> Favorites => _context.Favorites;
+
         public void AddProduct(Product Product)
         {
             _context.Add(Product);
