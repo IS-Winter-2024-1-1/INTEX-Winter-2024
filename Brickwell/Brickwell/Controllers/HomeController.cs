@@ -283,7 +283,7 @@ namespace Brickwell.Controllers
             IQueryable<Customer> customerList = _repo.Customers.Where(x => x.username == currentuser.UserName);
             if (customerList.Count() < 1)
             {
-                return RedirectToAction("CustomerInfo");
+                return RedirectToAction("SSAddCustomer");
             }
             else if (customerList.Count() > 1)
             {
