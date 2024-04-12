@@ -338,12 +338,12 @@ namespace Brickwell.Controllers
                 if (fraudObj.fraud == 0)
                 {
                     cart.Clear();
-                    return View("OrderConfirmation");
+                    return View("OrderConfirmation", order);
                 }
                 else 
                 {
                     cart.Clear();
-                    return RedirectToAction("OrderReview");
+                    return RedirectToAction("OrderReview", order);
                 }
 
             }

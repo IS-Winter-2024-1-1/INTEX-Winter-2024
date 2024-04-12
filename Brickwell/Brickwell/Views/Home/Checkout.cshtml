@@ -163,11 +163,17 @@
               </div>
             </div>
             <hr class="mb-4">
-            <button id="confirmSubmitButton" class="btn btn-primary btn-lg btn-block" type="button">Continue to checkout</button>
-             
+                <div class="row">
+                    <div class="col">
+                        <button id="confirmSubmitButton" class="btn btn-primary btn-lg btn-block" type="button">Continue to checkout</button>                    </div>
+                    <div class="col">
+                        <a class="btn btn-light btn-lg me-2" href="@Model.ReturnUrl">Continue Shopping</a>
+                    </div>
+                </div>
+
+
           </form>
           <div>
-                <a class="btn btn-primary btn-lg btn-block" href="@Model.ReturnUrl">Continue Shopping</a>
             </div>
         </div>
       </div>
