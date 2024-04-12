@@ -12,25 +12,30 @@
     <div class="row">
         <div class="col-md-12">
             <div class="page-header">
-                <h1>
+                <h1 class="text-white text-center">
                     Admin Dashboard
                 </h1>
             </div>
         </div>
     </div>
     <div class="row">
-        <div class="col-md-2" style="background: white">
-            <ul class="nav flex-column nav-pills">
-                <li class="nav-item">
-                    <a class="nav-link" asp-controller="Home" asp-action="ListProducts">View Products</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" asp-controller="Home" asp-action="ListCustomers">View Customers</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" asp-controller="Home" asp-action="ListOrders">Review Fraudulent Orders</a>
-                </li>
-            </ul>
+        <div class="col-md-2">
+            <div id="sidebar">
+                            <header>
+                                <a class="nav-link" asp-controller="Home" asp-action="AdminPage">Admin Home</a>
+                            </header>
+                            <ul class="nav">
+                                <li>
+                                    <a class="nav-link" asp-controller="Home" asp-action="ListProducts">View Products</a>
+                                </li>
+                                <li>
+                                    <a class="nav-link" asp-controller="Home" asp-action="ListCustomers">View Customers</a>
+                                </li>
+                                <li>
+                                    <a class="nav-link" asp-controller="Home" asp-action="ListOrders">Review Fraudulent Orders</a>
+                                </li>
+                            </ul>
+                        </div>
         </div>
         <div class="col-md-10">
             <h3 class="text-left">
@@ -38,7 +43,7 @@
             </h3>
             <table class="table table-hover">
                 <thead>
-                    <tr>
+                    <tr class="text-white">
                         <th>Last Name</th>
                         <th>First Name</th>
                         <th>Customer ID</th>
