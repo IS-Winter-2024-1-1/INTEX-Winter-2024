@@ -78,7 +78,7 @@ else
             </div>
 
             <div class="d-flex justify-content-end">
-                <button type="button" data-mdb-button-init data-mdb-ripple-init class="btn btn-light btn-lg me-2" href="@Model.ReturnUrl">Continue shopping</button>
+                <a type="button" data-mdb-button-init data-mdb-ripple-init class="btn btn-light btn-lg me-2" href="/Home/Products">Continue shopping</a>
                     <form method="get" asp-controller="Home" asp-action="Checkout">
                         <input type="hidden" name="returnUrl" value="@Model?.ReturnUrl" />
                         <button type="submit" data-mdb-button-init data-mdb-ripple-init class="btn btn-primary btn-lg">Checkout</button>
