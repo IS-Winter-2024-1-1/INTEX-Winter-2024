@@ -200,10 +200,42 @@ namespace Brickwell.Controllers
         [HttpGet]
         public IActionResult ProductDetails(int id)
         {
-            var productDetailed = new ProductDetailsViewModel()
+            int?[] productsToGet;
+
+            //try
+            //{              
+                ProductRecommendation row = _repo.ProductRecommendations.Where(x => x.product_ID == id).First();
+
+                Console.WriteLine(row);
+
+                productsToGet =
+                [
+                    row.recommendation_1,
+                    row.recommendation_2,
+                    row.recommendation_3
+                ];
+            //}
+            //catch (Exception e)
+            //{
+            //    Console.WriteLine(e.Message);
+
+            //    Favorite row = _repo.Favorites.Where(x => x.type == "product").First();
+
+            //    productsToGet =
+            //    [
+            //        row.favorite_1,
+            //        row.favorite_2,
+            //        row.favorite_3
+            //    ];
+            //}
+
+            ProductDetailsViewModel productDetailed = new ProductDetailsViewModel()
             {
-                Product = _repo.Products.FirstOrDefault(p => p.product_ID == id)
+                Product = _repo.Products.FirstOrDefault(p => p.product_ID == id),
+
+                Recommendations = _repo.Products.Where(x => productsToGet.Contains(x.product_ID))
             };
+
             return View(productDetailed);
         }
     

@@ -45,11 +45,11 @@
 <section class="py-5 bg-light">
     <div class="container px-4 px-lg-5 mt-5">
         <h2 class="fw-bolder mb-4">You may also enjoy:</h2>
-        @* <div class="row gx-4 gx-lg-5 row-cols-1 row-cols-md-2 row-cols-xl-3 justify-content-center"> *@
-        @*     @foreach (var product in Model) *@
-        @*     {  *@
-        @*         <partial name="ProductCard" model="product"/> *@
-        @*     } *@
-        @* </div> *@
+        <div class="row gx-4 gx-lg-5 row-cols-1 row-cols-md-2 row-cols-xl-3 justify-content-center"> 
+            @foreach (Product product in Model.Recommendations) 
+            {  
+                <partial name="ProductCard" model="product"/> 
+            } 
+        </div> 
     </div>
 </section>
