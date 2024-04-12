@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Brickwell.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240412001500_customerRecommendations")]
+    [Migration("20240412002154_customerRecommendations")]
     partial class customerRecommendations
     {
         /// <inheritdoc />
@@ -171,6 +171,31 @@ namespace Brickwell.Data.Migrations
                     b.ToTable("Customers");
                 });
 
+            modelBuilder.Entity("Brickwell.Models.CustomerRecommendation", b =>
+                {
+                    b.Property<int>("customer_ID")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("reccomendation_1")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("reccomendation_2")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("reccomendation_3")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("reccomendation_4")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("reccomendation_5")
+                        .HasColumnType("int");
+
+                    b.HasKey("customer_ID");
+
+                    b.ToTable("CustomerRecommendations");
+                });
+
             modelBuilder.Entity("Brickwell.Models.LineItem", b =>
                 {
                     b.Property<int>("transaction_ID")
@@ -315,7 +340,7 @@ namespace Brickwell.Data.Migrations
 
                     b.HasKey("product_ID");
 
-                    b.ToTable("Recommendations");
+                    b.ToTable("ProductRecommendations");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -430,6 +455,17 @@ namespace Brickwell.Data.Migrations
                     b.Navigation("Role");
 
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Brickwell.Models.CustomerRecommendation", b =>
+                {
+                    b.HasOne("Brickwell.Models.Customer", "Customer")
+                        .WithMany()
+                        .HasForeignKey("customer_ID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Customer");
                 });
 
             modelBuilder.Entity("Brickwell.Models.LineItem", b =>

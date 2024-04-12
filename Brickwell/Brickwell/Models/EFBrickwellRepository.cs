@@ -19,7 +19,9 @@ namespace Brickwell.Models
 
         public IQueryable<LineItem> LineItems => _context.LineItems;
 
-        public IQueryable<ProductRecommendation> Recommendations => _context.Recommendations;
+        public IQueryable<ProductRecommendation> ProductRecommendations => _context.ProductRecommendations;
+
+        public IQueryable<CustomerRecommendation> CustomerRecommendations => _context.CustomerRecommendations;
 
         public void AddProduct(Product Product)
         {
@@ -54,24 +56,6 @@ namespace Brickwell.Models
         public void UpdateCustomer(Customer Customer)
         {
             _context.Update(Customer);
-            _context.SaveChanges();
-        }
-
-        public void AddRecommendation(ProductRecommendation Recommendation)
-        {
-            _context.Add(Recommendation);
-            _context.SaveChanges();
-        }
-
-        public void RemoveRecommendation(ProductRecommendation Recommendation)
-        {
-            _context.Remove(Recommendation);
-            _context.SaveChanges();
-        }
-
-        public void UpdateRecommendation(ProductRecommendation Recommendation)
-        {
-            _context.Update(Recommendation);
             _context.SaveChanges();
         }
 

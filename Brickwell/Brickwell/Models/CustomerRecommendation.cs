@@ -3,12 +3,12 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Brickwell.Models
 {
-    public class UserRecommendation
+    public class CustomerRecommendation
     {
         [Key]
-        [ForeignKey("ApplicaitonUser")]
-        public string Id { get; set; }
-        public ApplicationUser ApplicationUser { get; set; }
+        [ForeignKey("Customer")]
+        public int customer_ID { get; set; }
+        public Customer Customer { get; set; }
         public int? reccomendation_1 { get; set; }
         public int? reccomendation_2 { get; set; }
         public int? reccomendation_3 { get; set; }

@@ -12,7 +12,8 @@ namespace Brickwell.Models
 
         IQueryable<LineItem> LineItems { get; }
 
-        IQueryable<ProductRecommendation> Recommendations { get; }
+        IQueryable<ProductRecommendation> ProductRecommendations { get; }
+        IQueryable<CustomerRecommendation> CustomerRecommendations { get; }
 
         public void AddProduct(Product Product);
         public void RemoveProduct(Product Product);
@@ -22,10 +23,7 @@ namespace Brickwell.Models
         public void RemoveCustomer(Customer Customer);
         public void UpdateCustomer(Customer Customer);
 
-        public void AddRecommendation(ProductRecommendation Recommendation);
-        public void RemoveRecommendation(ProductRecommendation Recommendation);
-        public void UpdateRecommendation(ProductRecommendation Recommendation);
-
+        
         public void AddOrder(Order Order);
 
 
