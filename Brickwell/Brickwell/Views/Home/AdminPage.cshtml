@@ -7,72 +7,69 @@
 @model OrderListViewModel
 
 <div class="container-fluid">
-    <div class="row">
-        <!-- Sidebar -->
-        <nav class="sidebar col-md-3" style="background: #86BBD8">
-            <ul class="nav flex-column" style="margin-top: 100px;">
-                <li class="nav-item">
-                    <a class="nav-link" asp-controller="Home" asp-action="ListProducts">View Products</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" asp-controller="Home" asp-action="ListCustomers">View Customers</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" asp-controller="Home" asp-action="ListOrders">Review Fraudulent Orders</a>
-                </li>
-            </ul>
-        </nav>
-
-        <!-- Main Content -->
-        <section class="col-md-9 align-self-start">
-            <div class="intro">
-                <div class="gradient-custom-1 h-100">
-                    <div class="mask d-flex align-items-center h-100">
-                        <div class="container">
-                            <div class="row justify-content-center">
-                                <div class="col-12">
-                                    <h1 class="text-center mb-4 text-white">Admin Dashboard</h1>
-                                    <div class="table-responsive bg-white rounded">
-                                        <table class="table table-striped">
-                                            <thead>
-                                                <tr>
-                                                    <th scope="col">Transaction Id</th>
-                                                    <th scope="col">Day of the Week</th>
-                                                    <th scope="col">Date</th>
-                                                    <th scope="col">Time</th>
-                                                    <th scope="col">Amount</th>
-                                                    <th scope="col">Country of Transaction</th>
-                                                    <th scope="col">Shipping Address</th>
-                                                    <th scope="col">Bank</th>
-                                                    <th scope="col"></th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                @foreach (var order in Model.Orders)
-                                                {
-                                                <tr>
-                                                    <th scope="row" style="color: #666666;">@order.transaction_ID</th>
-                                                    <td>@order.day_of_week</td>
-                                                    <td>@order.date</td>
-                                                    <td>@order.time</td>
-                                                    <td>@order.amount</td>
-                                                    <td>@order.country_of_transaction</td>
-                                                    <td>@order.shipping_address</td>
-                                                    <td>@order.bank</td>
-                                                </tr>
-                                                }
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </div>
-                            </div>
+	<div class="row">
+		<div class="col-md-12">
+			<div class="page-header">
+				<h1 class="text-white text-center">
+					Admin Dashboard
+				</h1>
+			</div>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-2">
+			<div id="sidebar">
+                            <header>
+                                <a class="nav-link" asp-controller="Home" asp-action="AdminPage">Admin Home</a>
+                            </header>
+                            <ul class="nav">
+                                <li>
+                                    <a class="nav-link" asp-controller="Home" asp-action="ListProducts">View Products</a>
+                                </li>
+                                <li>
+                                    <a class="nav-link" asp-controller="Home" asp-action="ListCustomers">View Customers</a>
+                                </li>
+                                <li>
+                                    <a class="nav-link" asp-controller="Home" asp-action="ListOrders">Review Fraudulent Orders</a>
+                                </li>
+                            </ul>
                         </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-    </div>
+		</div>
+		<div class="col-md-10">
+			<h3 class="text-left">
+				Recent Orders
+			</h3>
+			<table class="table table-hover">
+				<thead>
+				<tr class="text-white">
+					<th scope="col">Transaction Id</th>
+					<th scope="col">Day of the Week</th>
+					<th scope="col">Date</th>
+					<th scope="col">Time</th>
+					<th scope="col">Amount</th>
+					<th scope="col">Country of Transaction</th>
+					<th scope="col">Shipping Address</th>
+					<th scope="col">Bank</th>
+					<th scope="col"></th>
+				</tr>
+				</thead>
+				<tbody>
+				@foreach (var order in Model.Orders)
+				{
+					<tr>
+						<th scope="row" class="text-dark" style="color: #666666;">@order.transaction_ID</th>
+						<td>@order.day_of_week</td>
+						<td>@order.date</td>
+						<td>@order.time</td>
+						<td>@order.amount</td>
+						<td>@order.country_of_transaction</td>
+						<td>@order.shipping_address</td>
+						<td>@order.bank</td>
+					</tr>
+				}
+				</tbody>
+			</table>
+		</div>
+	</div>
 </div>
-
-
 

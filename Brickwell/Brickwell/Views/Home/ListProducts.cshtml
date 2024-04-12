@@ -4,16 +4,49 @@
 
 @model ProductAdminListViewModel
 
-<h1>@ViewData["Title"]</h1>
-
-<a class="btn btn-primary" asp-controller="Home" asp-action="AddProduct">Add Product</a> <br /><br />
-
-<div class="row gx-4 gx-lg-5 row-cols-1 row-cols-md-2 row-cols-xl-3 justify-content-center">
-    @foreach (var product in Model.Products)
-    {
-        <partial name="ProductOverviewCard" model="product" />
-    }
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="page-header">
+                <h1 class="text-white text-center">
+                    Admin Dashboard
+                </h1>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-2">
+            <div id="sidebar">
+                            <header>
+                                <a class="nav-link" asp-controller="Home" asp-action="AdminPage">Admin Home</a>
+                            </header>
+                            <ul class="nav">
+                                <li>
+                                    <a class="nav-link" asp-controller="Home" asp-action="ListProducts">View Products</a>
+                                </li>
+                                <li>
+                                    <a class="nav-link" asp-controller="Home" asp-action="ListCustomers">View Customers</a>
+                                </li>
+                                <li>
+                                    <a class="nav-link" asp-controller="Home" asp-action="ListOrders">Review Fraudulent Orders</a>
+                                </li>
+                            </ul>
+                        </div>
+        </div>
+        <div class="col-md-10">
+           <a class="btn btn-primary" asp-controller="Home" asp-action="AddProduct">Add Product</a> <br /><br />
+           
+           <div class="row gx-4 gx-lg-5 row-cols-1 row-cols-md-2 row-cols-xl-3 justify-content-center">
+               @foreach (var product in Model.Products)
+               {
+                   <partial name="ProductOverviewCard" model="product" />
+               }
+           </div>
+        </div>
+    </div>
 </div>
+
+
 
 
 <div page-model="@Model.PaginationInfo" page-action="ListProducts">

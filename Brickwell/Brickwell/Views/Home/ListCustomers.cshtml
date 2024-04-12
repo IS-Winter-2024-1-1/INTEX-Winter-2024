@@ -8,55 +8,88 @@
 
 <a class="btn btn-primary" asp-controller="Home" asp-action="AddCustomer">Add New Customer</a> <br /><br />
 
-<div class="table justify-content-center">
-        <table>
-            <thead>
-                <tr>
-                    <th>Last Name</th>
-                    <th>First Name</th>
-                    <th>Customer ID</th>
-                    <th>Username/Email</th>
-                    <th>Birth Day</th>
-                    <th>Country</th>
-                    <th>Gender</th>
-                    <th>Age</th>
-                    <th>Current Role</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var customer in Model.Customers.ToList())
-                {
-                var userRole = Model.UserRoles.Where(x => x.User.UserName == customer.username).FirstOrDefault();
-                string role;
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="page-header">
+                <h1 class="text-white text-center">
+                    Admin Dashboard
+                </h1>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-2">
+            <div id="sidebar">
+                            <header>
+                                <a class="nav-link" asp-controller="Home" asp-action="AdminPage">Admin Home</a>
+                            </header>
+                            <ul class="nav">
+                                <li>
+                                    <a class="nav-link" asp-controller="Home" asp-action="ListProducts">View Products</a>
+                                </li>
+                                <li>
+                                    <a class="nav-link" asp-controller="Home" asp-action="ListCustomers">View Customers</a>
+                                </li>
+                                <li>
+                                    <a class="nav-link" asp-controller="Home" asp-action="ListOrders">Review Fraudulent Orders</a>
+                                </li>
+                            </ul>
+                        </div>
+        </div>
+        <div class="col-md-10">
+            <h3 class="text-left">
+                User Information
+            </h3>
+            <table class="table table-hover">
+                <thead>
+                    <tr class="text-white">
+                        <th>Last Name</th>
+                        <th>First Name</th>
+                        <th>Customer ID</th>
+                        <th>Username/Email</th>
+                        <th>Birth Day</th>
+                        <th>Country</th>
+                        <th>Gender</th>
+                        <th>Age</th>
+                        <th>Current Role</th>
+                    </tr>
+                </thead>
+                    <tbody>
+                        @foreach (var customer in Model.Customers.ToList())
+                        {
+                        var userRole = Model.UserRoles.Where(x => x.User.UserName == customer.username).FirstOrDefault();
+                        string role;
 
-                if (userRole != null)
-                {
-                    role = userRole.Role.Name;
-                }
-                else
-                {
-                    role = "Account Not Found";
-                }
-                <tr>
-                    <td>@customer.last_name</td>
-                    <td>@customer.first_name</td>
-                    <td>@customer.customer_ID</td>
-                    <td>@customer.username</td>
-                    <td>@customer.birth_date</td>
-                    <td>@customer.country_of_residence</td>
-                    <td>@customer.gender</td>
-                    <td>@customer.age</td>
-                    <td>@role</td>
-                    <td>
-                        <a class="btn btn-primary" asp-controller="Home" asp-action="EditCustomer" asp-route-id="@customer.customer_ID">Edit</a>
-                        <button type="button" class="btn btn-danger" id="confirmSubmitButton" asp-controller="Home" asp-action="DeleteCustomer" asp-route-id="@customer.customer_ID">Delete</button>
-                    </td>
-                </tr>
-                }
-            </tbody>
-        </table>
+                        if (userRole != null)
+                        {
+                            role = userRole.Role.Name;
+                        }
+                        else
+                        {
+                            role = "Account Not Found";
+                        }
+                        <tr>
+                            <td>@customer.last_name</td>
+                            <td>@customer.first_name</td>
+                            <td>@customer.customer_ID</td>
+                            <td>@customer.username</td>
+                            <td>@customer.birth_date</td>
+                            <td>@customer.country_of_residence</td>
+                            <td>@customer.gender</td>
+                            <td>@customer.age</td>
+                            <td>@role</td>
+                            <td>
+                                <a class="btn btn-primary" asp-controller="Home" asp-action="EditCustomer" asp-route-id="@customer.customer_ID">Edit</a>
+                                <button type="button" class="btn btn-danger" id="confirmSubmitButton" asp-controller="Home" asp-action="DeleteCustomer" asp-route-id="@customer.customer_ID">Delete</button>
+                            </td>
+                        </tr>
+                        }
+                    </tbody>
+            </table>
+        </div>
+    </div>
 </div>
-
 
 <div page-model="@Model.PaginationInfo" page-action="ListCustomers">
     <nav aria-label="Page navigation">
@@ -99,3 +132,54 @@
 
 
 <script src="~/js/confirmSubmit.js"></script>
+@* <div class="table justify-content-center"> *@
+@*         <table> *@
+@*             <thead> *@
+@*                 <tr> *@
+@*                     <th>Last Name</th> *@
+@*                     <th>First Name</th> *@
+@*                     <th>Customer ID</th> *@
+@*                     <th>Username/Email</th> *@
+@*                     <th>Birth Day</th> *@
+@*                     <th>Country</th> *@
+@*                     <th>Gender</th> *@
+@*                     <th>Age</th> *@
+@*                     <th>Current Role</th> *@
+@*                 </tr> *@
+@*             </thead> *@
+@*             <tbody> *@
+@*                 @foreach (var customer in Model.Customers.ToList()) *@
+@*                 { *@
+@*                 var userRole = Model.UserRoles.Where(x => x.User.UserName == customer.username).FirstOrDefault(); *@
+@*                 string role; *@
+@* *@
+@*                 if (userRole != null) *@
+@*                 { *@
+@*                     role = userRole.Role.Name; *@
+@*                 } *@
+@*                 else *@
+@*                 { *@
+@*                     role = "Account Not Found"; *@
+@*                 } *@
+@*                 <tr> *@
+@*                     <td>@customer.last_name</td> *@
+@*                     <td>@customer.first_name</td> *@
+@*                     <td>@customer.customer_ID</td> *@
+@*                     <td>@customer.username</td> *@
+@*                     <td>@customer.birth_date</td> *@
+@*                     <td>@customer.country_of_residence</td> *@
+@*                     <td>@customer.gender</td> *@
+@*                     <td>@customer.age</td> *@
+@*                     <td>@role</td> *@
+@*                     <td> *@
+@*                         <a class="btn btn-primary" asp-controller="Home" asp-action="EditCustomer" asp-route-id="@customer.customer_ID">Edit</a> *@
+@*                         <button type="button" class="btn btn-danger" id="confirmSubmitButton" asp-controller="Home" asp-action="DeleteCustomer" asp-route-id="@customer.customer_ID">Delete</button> *@
+@*                     </td> *@
+@*                 </tr> *@
+@*                 } *@
+@*             </tbody> *@
+@*         </table> *@
+@* </div> *@
+
+
+
