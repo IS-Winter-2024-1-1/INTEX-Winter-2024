@@ -17,6 +17,7 @@ using System.Data;
 using System.Diagnostics;
 using System.Net.Http;
 using System.Text;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Brickwell.Controllers
 {
@@ -27,6 +28,7 @@ namespace Brickwell.Controllers
         private readonly ApplicationDbContext _dbcontext;
         private readonly UserManager<ApplicationUser> _usermanager;
         private readonly RoleManager<ApplicationRole> _roleManager;
+        private readonly SignInManager<ApplicationUser> _signInManager;
 
         // Create Cart for the session here
         public Cart cart { get; set; }
@@ -34,6 +36,7 @@ namespace Brickwell.Controllers
         public HomeController(IBrickwellRepository temp,
                                 UserManager<ApplicationUser> userManager,
                                 RoleManager<ApplicationRole> roleManager,
+                                SignInManager<ApplicationUser> signInManager,
                                 ApplicationDbContext applicationDbContext,
                                 Cart cartService)
         {
@@ -41,15 +44,65 @@ namespace Brickwell.Controllers
             _dbcontext = applicationDbContext;
             _usermanager = userManager;
             _roleManager = roleManager;
+            _signInManager = signInManager;
             cart = cartService;
             _roleManager = roleManager;
         }
 
 
 
-        public IActionResult Index()
+
+
+        public async Task<IActionResult> Index()
         {
-            var userRecProducts = _repo.Products;
+            int?[] productsToGet;
+            
+
+            if (_signInManager.IsSignedIn(User))
+            {
+                
+
+                try
+                {
+                    ApplicationUser user = await _usermanager.FindByNameAsync(User.Identity.Name);
+                    int customerId = _repo.Customers.Where(x => x.username == user.UserName).First().customer_ID;
+                    CustomerRecommendation row = _repo.CustomerRecommendations.Where(x => x.customer_ID == customerId).First();
+
+                    productsToGet =
+                    [
+                        row.recommendation_1,
+                        row.recommendation_2,
+                        row.recommendation_3
+                    ];
+                }
+                catch
+                {
+                    Favorite row = _repo.Favorites.Where(x => x.type == "customer").First();
+
+                    productsToGet =
+                    [
+                        row.favorite_1,
+                        row.favorite_2,
+                        row.favorite_3
+                    ];
+                }
+
+            }
+            else 
+            {
+                Favorite row = _repo.Favorites.Where(x => x.type == "customer").First();
+
+                productsToGet =
+                [
+                    row.favorite_1,
+                    row.favorite_2,
+                    row.favorite_3
+                ];
+            }
+
+
+            IQueryable<Product> userRecProducts = _repo.Products.Where(x => productsToGet.Contains(x.product_ID));
+
             return View(userRecProducts);
         }
 
@@ -399,7 +452,7 @@ namespace Brickwell.Controllers
         {
             _repo.UpdateCustomer(customer);
             // 
-            return View("Index");
+            return RedirectToAction("Index");
         }
 
 
