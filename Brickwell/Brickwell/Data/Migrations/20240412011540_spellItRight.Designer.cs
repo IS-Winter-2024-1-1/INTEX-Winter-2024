@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Brickwell.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240410162226_applicationidentity")]
-    partial class applicationidentity
+    [Migration("20240412011540_spellItRight")]
+    partial class spellItRight
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -171,6 +171,31 @@ namespace Brickwell.Data.Migrations
                     b.ToTable("Customers");
                 });
 
+            modelBuilder.Entity("Brickwell.Models.CustomerRecommendation", b =>
+                {
+                    b.Property<int>("customer_ID")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("recommendation_1")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("recommendation_2")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("recommendation_3")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("recommendation_4")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("recommendation_5")
+                        .HasColumnType("int");
+
+                    b.HasKey("customer_ID");
+
+                    b.ToTable("CustomerRecommendations");
+                });
+
             modelBuilder.Entity("Brickwell.Models.LineItem", b =>
                 {
                     b.Property<int>("transaction_ID")
@@ -200,11 +225,10 @@ namespace Brickwell.Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("transaction_ID"));
 
-                    b.Property<int>("amount")
-                        .HasColumnType("int");
+                    b.Property<decimal>("amount")
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<string>("bank")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("country_of_transaction")
@@ -214,9 +238,8 @@ namespace Brickwell.Data.Migrations
                     b.Property<int>("customer_ID")
                         .HasColumnType("int");
 
-                    b.Property<string>("date")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<DateOnly>("date")
+                        .HasColumnType("date");
 
                     b.Property<string>("day_of_week")
                         .IsRequired()
@@ -237,7 +260,6 @@ namespace Brickwell.Data.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("type_of_card")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("type_of_transaction")
@@ -278,8 +300,8 @@ namespace Brickwell.Data.Migrations
                     b.Property<int>("num_parts")
                         .HasColumnType("int");
 
-                    b.Property<int>("price")
-                        .HasColumnType("int");
+                    b.Property<decimal>("price")
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<string>("primary_color")
                         .IsRequired()
@@ -296,7 +318,7 @@ namespace Brickwell.Data.Migrations
                     b.ToTable("Products");
                 });
 
-            modelBuilder.Entity("Brickwell.Models.Recommendation", b =>
+            modelBuilder.Entity("Brickwell.Models.ProductRecommendation", b =>
                 {
                     b.Property<int>("product_ID")
                         .HasColumnType("int");
@@ -318,7 +340,7 @@ namespace Brickwell.Data.Migrations
 
                     b.HasKey("product_ID");
 
-                    b.ToTable("Recommendations");
+                    b.ToTable("ProductRecommendations");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -435,6 +457,17 @@ namespace Brickwell.Data.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("Brickwell.Models.CustomerRecommendation", b =>
+                {
+                    b.HasOne("Brickwell.Models.Customer", "Customer")
+                        .WithMany()
+                        .HasForeignKey("customer_ID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Customer");
+                });
+
             modelBuilder.Entity("Brickwell.Models.LineItem", b =>
                 {
                     b.HasOne("Brickwell.Models.Product", "Product")
@@ -465,7 +498,7 @@ namespace Brickwell.Data.Migrations
                     b.Navigation("Customer");
                 });
 
-            modelBuilder.Entity("Brickwell.Models.Recommendation", b =>
+            modelBuilder.Entity("Brickwell.Models.ProductRecommendation", b =>
                 {
                     b.HasOne("Brickwell.Models.Product", "Product")
                         .WithMany()

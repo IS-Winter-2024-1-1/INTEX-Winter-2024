@@ -298,19 +298,19 @@ namespace Brickwell.Data.Migrations
                     b.Property<int>("product_ID")
                         .HasColumnType("int");
 
-                    b.Property<int?>("reccomendation_1")
+                    b.Property<int?>("recommendation_1")
                         .HasColumnType("int");
 
-                    b.Property<int?>("reccomendation_2")
+                    b.Property<int?>("recommendation_2")
                         .HasColumnType("int");
 
-                    b.Property<int?>("reccomendation_3")
+                    b.Property<int?>("recommendation_3")
                         .HasColumnType("int");
 
-                    b.Property<int?>("reccomendation_4")
+                    b.Property<int?>("recommendation_4")
                         .HasColumnType("int");
 
-                    b.Property<int?>("reccomendation_5")
+                    b.Property<int?>("recommendation_5")
                         .HasColumnType("int");
 
                     b.HasKey("product_ID");
