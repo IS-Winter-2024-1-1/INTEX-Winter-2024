@@ -315,6 +315,15 @@ table {
   border-collapse: collapse;
 }
 
+.sidebar .nav-link {
+  font-weight: 500;
+  color: var(--bs-dark);
+}
+.sidebar .nav-link:hover {
+  background: var(--bs-light);
+  color: var(--bs-primary);
+}
+
 caption {
   padding-top: 0.5rem;
   padding-bottom: 0.5rem;

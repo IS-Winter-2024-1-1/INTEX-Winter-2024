@@ -352,13 +352,6 @@ namespace Brickwell.Controllers
 
             
         }
-
-
-
-
-
-
-
         
         // Add customer (self-service).
         [HttpGet]
@@ -429,8 +422,11 @@ namespace Brickwell.Controllers
         [HttpGet]
         public IActionResult AdminPage()
         {
-            // send the admin page
-            return View();
+            var tenOrders = new OrderListViewModel()
+            {
+                Orders = _repo.Orders.OrderByDescending(o => o.date).Take(10)
+            };
+            return View(tenOrders);
         }
 
         // List Fraud Orders for Admin
