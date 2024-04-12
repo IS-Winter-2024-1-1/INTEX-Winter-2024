@@ -394,8 +394,6 @@ namespace Brickwell.Controllers
                 string JSONbody = JsonConvert.SerializeObject(body);
                 var httpContent = new StringContent(JSONbody, Encoding.UTF8, "application/json");
 
-                client.DefaultRequestHeaders.Add("x-functions-key", System.IO.File.ReadAllText(Directory.GetCurrentDirectory() + "/APIkey.txt"));
-                
                 HttpResponseMessage response = await client.PostAsync("https://isitfraud.azurewebsites.net/api/isitfraud", httpContent);
                 string responseString = await response.Content.ReadAsStringAsync();
 
