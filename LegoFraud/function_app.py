@@ -12,7 +12,7 @@ def isitfraud(req: func.HttpRequest) -> func.HttpResponse:
         req_body = req.get_json()
         
     except:
-        return func.httpRespone(
+        return func.httpResponse(
             "Internal server error!",
             status_code=500
         )
