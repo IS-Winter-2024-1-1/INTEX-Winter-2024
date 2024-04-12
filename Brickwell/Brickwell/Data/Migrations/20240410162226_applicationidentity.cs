@@ -85,11 +85,11 @@ namespace Brickwell.Data.Migrations
                 columns: table => new
                 {
                     product_ID = table.Column<int>(type: "int", nullable: false),
-                    reccomendation_1 = table.Column<int>(type: "int", nullable: true),
-                    reccomendation_2 = table.Column<int>(type: "int", nullable: true),
-                    reccomendation_3 = table.Column<int>(type: "int", nullable: true),
-                    reccomendation_4 = table.Column<int>(type: "int", nullable: true),
-                    reccomendation_5 = table.Column<int>(type: "int", nullable: true)
+                    recommendation_1 = table.Column<int>(type: "int", nullable: true),
+                    recommendation_2 = table.Column<int>(type: "int", nullable: true),
+                    recommendation_3 = table.Column<int>(type: "int", nullable: true),
+                    recommendation_4 = table.Column<int>(type: "int", nullable: true),
+                    recommendation_5 = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {

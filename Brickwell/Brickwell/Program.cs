@@ -80,6 +80,12 @@ builder.Services.AddHsts(options =>
     // options.ExcludedHosts.Add("www.example.com");
 });
 
+builder.Services.AddDistributedMemoryCache();
+builder.Services.AddSession();
+
+builder.Services.AddScoped<Cart>(sp => SessionCart.GetCart(sp));
+builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -97,13 +103,16 @@ else
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 
+app.UseSession();
+
 app.Use(async (ctx, next) =>
 {
     ctx.Response.Headers.Append("Content-Security-Policy", // TODO: Keep this updated!
-                                "default-src 'self'" +
-                                "script-src 'self'" +
-                                "img-src 'self' https://m.media-amazon.com/ https://www.lego.com/ https://images.brickset.com/ https://www.brickeconomy.com/;" +
-                                "style-src 'self' 'unsafe-inline'");
+                                "default-src 'self';" +
+                                "connect-src 'self';" +
+                                "script-src 'self' 'sha256-7fWbrmA+Qx3CiwTN+bIxqIBcIUx4vVvg0pNvy+DykaY=' 'sha256-m1igTNlg9PL5o60ru2HIIK6OPQet2z9UgiEAhCyg/RU=' 'sha256-fIkC4b4crvv6N/++kl5qCd/nhTe0/JC7KANDL3YeODw=' 'sha256-w77ktvJB3FybpHrTd4ooqbairmYaAaYtYtuhBeiorvc=' 'sha256-9GlY3b6hPAM+8e87VxZOLd7mBlAQNTn31WsGviLLncc=' 'sha256-JE2J1ZcmHHspDIcaYOlWNACJ2bhnE6shsG8EeIBNOCw=' 'sha256-m1igTNlg9PL5o60ru2HIIK6OPQet2z9UgiEAhCyg/RU=' https://cdnjs.cloudflare.com https://code.jquery.com;" +
+                                "img-src 'self' http://www.w3.org http://www.w3.org/2000/svg https://live.staticflickr.com/65535/;" +
+                                "style-src 'self' 'unsafe-inline';") ;
     await next();
 });
 
@@ -114,7 +123,9 @@ app.UseCookiePolicy();
 app.UseRouting();
 
 app.UseAuthorization();
-
+// app.MapControllerRoute("pagenumandtype", "{projectType}/{pageNum}", new { Controller = "Home", action = "Products" });
+// app.MapControllerRoute("projectType", "{productType}", new { Controller = "Home", action = "Products", pageNum = 1 });
+// app.MapControllerRoute("pagination", "{pageNum}", new {Controller = "Home", action = "Products", pageNum = 1});
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
