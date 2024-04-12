@@ -1,0 +1,39 @@
+
+
+@model Product
+
+<div class="col mb-5">
+    <div class="card h-100">
+        <!-- Product image-->
+        <img class="card-img-top" src="@Model.img_link" alt="..." />
+
+        <!-- Product details and actions -->
+        <div class="card-body p-4">
+            <div class="text-center">
+                <!-- Product name-->
+                <h5 class="fw-bolder">@Model.name</h5>
+                <!-- Product price-->
+                $@Model.price
+            </div>
+
+            <!-- Product description (scrollable area) -->
+            <div class="product-description mt-3" style="max-height: 100px; overflow-y: auto;">
+                <p>
+                    <!-- Add your product description here -->
+                    @Model.description
+                </p>
+            </div>
+
+            <!-- Product actions -->
+            <div class="product-actions">
+                <a class="btn btn-info" asp-controller="Home" asp-action="EditProduct" asp-route-id="@Model.product_ID">Edit</a>
+                <form id="submissionForm" asp-controller="Home" asp-action="DeleteProduct" method="post" style="display:inline;">
+                    <input type="hidden" name="product_ID" value="@Model.product_ID" />
+                    <button id="confirmSubmitButton" type="button" class="btn btn-danger">Delete</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="~/js/confirmSubmit.js"></script>

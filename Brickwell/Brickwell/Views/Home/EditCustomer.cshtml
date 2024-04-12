@@ -2,18 +2,18 @@
     For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 *@
 @{
-    ViewData["Title"] = "Edit Customer";
+    ViewData["Title"] = "Edit Customer Information";
 }
 
 @model Customer
 
 <h1>@ViewData["Title"]</h1>
 
-<form method="post">
+<form method="post" id="submissionForm">
     <input asp-for="customer_ID" hidden><br>
 
     <label asp-for="username">Username:</label><br>
-    <input required asp-for="username" type="text" id="username" name="username"><br>
+    <input asp-for="username" type="text" id="username" name="username"><br>
 
     <label asp-for="first_name">First Name:</label><br>
     <input required asp-for="first_name" type="text" id="first_name" name="first_name"><br>
@@ -38,8 +38,22 @@
     <input required asp-for="age" type="number" id="age" name="age"><br>
 
     <label>Role:</label><br>
-    <input type="text" id="role" name="role"><br>
+    @if (ViewBag.CurrentlyEditingRole == "Customer" || ViewBag.CurrentlyEditingRole == "Admin")
+    {
+        <select id="role" name="role"><br>
+            <option value="Customer">Customer</option>
+            <option value="Admin">Admin</option>
+        </select>
+    }
+    else
+    {
+        <select id="role" name="role">
+            <br>
+            <option value="Account Not Found" selected disabled>Account Not Found</option>
+        </select>
+    }
 
     <br>
-    <input type="submit" value="Save" class="btn btn-primary">
+    <button id="confirmSubmitButton" type="button" class="btn btn-primary">Save</button>
 </form>
+<script src="~/js/confirmSubmit.js"></script>

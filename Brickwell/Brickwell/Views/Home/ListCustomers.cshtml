@@ -6,47 +6,180 @@
 
 <h1>@ViewData["Title"]</h1>
 
-<div class="customer-list">
-    @foreach (var customer in Model.Customers)
-    {
-        <div class="customer">
-            <div class="customer-property">
-                <strong>Customer ID:</strong> @customer.customer_ID
-            </div>
-            <div class="customer-property">
-                <strong>Username/email:</strong> @customer.username
-            </div>
-            <div class="customer-property">
-                <strong>Name:</strong> @customer.last_name, @customer.first_name
-            </div>
-            <div class="customer-property">
-                <strong>Birth Day:</strong> @customer.birth_date
-            </div>
-            <div class="customer-property">
-                <strong>Country:</strong> @customer.country_of_residence
-            </div>
-            <div class="customer-property">
-                <strong>Gender:</strong> @customer.gender
-            </div>
-            <div class="customer-property">
-                <strong>Age:</strong> @customer.age
-            </div>
-            <div class="customer-property">
-                <strong>Current Role:</strong> Their Role
-            </div>
-            <div class="customer-property">
-                <a class="btn btn-info" asp-controller="Home" asp-action="EditCustomer" asp-route-id="@customer.customer_ID">Edit</a>
-                <form asp-controller="Home" asp-action="DeleteCustomer" method="post" style="display:inline;">
-                    <input type="hidden" name="customer_ID" value="@customer.customer_ID" />
-                    <button type="submit" class="btn btn-danger">Delete</button>
-                </form>
+<a class="btn btn-primary" asp-controller="Home" asp-action="AddCustomer">Add New Customer</a> <br /><br />
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="page-header">
+                <h1 class="text-white text-center">
+                    Admin Dashboard
+                </h1>
             </div>
         </div>
-    }
+    </div>
+    <div class="row">
+        <div class="col-md-2">
+            <div id="sidebar">
+                            <header>
+                                <a class="nav-link" asp-controller="Home" asp-action="AdminPage">Admin Home</a>
+                            </header>
+                            <ul class="nav">
+                                <li>
+                                    <a class="nav-link" asp-controller="Home" asp-action="ListProducts">View Products</a>
+                                </li>
+                                <li>
+                                    <a class="nav-link" asp-controller="Home" asp-action="ListCustomers">View Customers</a>
+                                </li>
+                                <li>
+                                    <a class="nav-link" asp-controller="Home" asp-action="ListOrders">Review Fraudulent Orders</a>
+                                </li>
+                            </ul>
+                        </div>
+        </div>
+        <div class="col-md-10">
+            <h3 class="text-left">
+                User Information
+            </h3>
+            <table class="table table-hover">
+                <thead>
+                    <tr class="text-white">
+                        <th>Last Name</th>
+                        <th>First Name</th>
+                        <th>Customer ID</th>
+                        <th>Username/Email</th>
+                        <th>Birth Day</th>
+                        <th>Country</th>
+                        <th>Gender</th>
+                        <th>Age</th>
+                        <th>Current Role</th>
+                    </tr>
+                </thead>
+                    <tbody>
+                        @foreach (var customer in Model.Customers.ToList())
+                        {
+                        var userRole = Model.UserRoles.Where(x => x.User.UserName == customer.username).FirstOrDefault();
+                        string role;
+
+                        if (userRole != null)
+                        {
+                            role = userRole.Role.Name;
+                        }
+                        else
+                        {
+                            role = "Account Not Found";
+                        }
+                        <tr>
+                            <td>@customer.last_name</td>
+                            <td>@customer.first_name</td>
+                            <td>@customer.customer_ID</td>
+                            <td>@customer.username</td>
+                            <td>@customer.birth_date</td>
+                            <td>@customer.country_of_residence</td>
+                            <td>@customer.gender</td>
+                            <td>@customer.age</td>
+                            <td>@role</td>
+                            <td>
+                                <a class="btn btn-primary" asp-controller="Home" asp-action="EditCustomer" asp-route-id="@customer.customer_ID">Edit</a>
+                                <button type="button" class="btn btn-danger" id="confirmSubmitButton" asp-controller="Home" asp-action="DeleteCustomer" asp-route-id="@customer.customer_ID">Delete</button>
+                            </td>
+                        </tr>
+                        }
+                    </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<div page-model="@Model.PaginationInfo" page-action="ListCustomers">
+    <nav aria-label="Page navigation">
+        <ul class="pagination justify-content-center">
+            @{
+                int totalPages = Model.PaginationInfo.TotalPages;
+                int currentPage = Model.PaginationInfo.CurrentPage;
+                int maxVisiblePages = 5; // Adjust this value to change the maximum number of visible page links
+                int startPage = Math.Max(1, currentPage - maxVisiblePages / 2);
+                int endPage = Math.Min(startPage + maxVisiblePages - 1, totalPages);
+                startPage = Math.Max(1, endPage - maxVisiblePages + 1);
+            }
+            @if (startPage > 1)
+            {
+                <li class="page-item">
+                    <a class="page-link" href="#" onclick="gotoPage(1)">1</a>
+                </li>
+                <li class="page-item disabled">
+                    <span class="page-link">...</span>
+                </li>
+            }
+            @for (int i = startPage; i <= endPage; i++)
+            {
+                <li class="page-item @(i == currentPage ? "active" : "")">
+                    <a class="page-link" href="#" onclick="gotoPage(@i)">@i</a>
+                </li>
+            }
+            @if (endPage < totalPages)
+            {
+                <li class="page-item disabled">
+                    <span class="page-link">...</span> 
+                </li>
+                <li class="page-item">
+                    <a class="page-link" href="#" onclick="gotoPage(@totalPages)">@totalPages</a>
+                </li>
+            }
+        </ul>
+    </nav>
 </div>
 
 
-<a class="btn btn-info" asp-controller="Home" asp-action="AddCustomer">Add New Customer</a>
+<script src="~/js/confirmSubmit.js"></script>
+@* <div class="table justify-content-center"> *@
+@*         <table> *@
+@*             <thead> *@
+@*                 <tr> *@
+@*                     <th>Last Name</th> *@
+@*                     <th>First Name</th> *@
+@*                     <th>Customer ID</th> *@
+@*                     <th>Username/Email</th> *@
+@*                     <th>Birth Day</th> *@
+@*                     <th>Country</th> *@
+@*                     <th>Gender</th> *@
+@*                     <th>Age</th> *@
+@*                     <th>Current Role</th> *@
+@*                 </tr> *@
+@*             </thead> *@
+@*             <tbody> *@
+@*                 @foreach (var customer in Model.Customers.ToList()) *@
+@*                 { *@
+@*                 var userRole = Model.UserRoles.Where(x => x.User.UserName == customer.username).FirstOrDefault(); *@
+@*                 string role; *@
+@* *@
+@*                 if (userRole != null) *@
+@*                 { *@
+@*                     role = userRole.Role.Name; *@
+@*                 } *@
+@*                 else *@
+@*                 { *@
+@*                     role = "Account Not Found"; *@
+@*                 } *@
+@*                 <tr> *@
+@*                     <td>@customer.last_name</td> *@
+@*                     <td>@customer.first_name</td> *@
+@*                     <td>@customer.customer_ID</td> *@
+@*                     <td>@customer.username</td> *@
+@*                     <td>@customer.birth_date</td> *@
+@*                     <td>@customer.country_of_residence</td> *@
+@*                     <td>@customer.gender</td> *@
+@*                     <td>@customer.age</td> *@
+@*                     <td>@role</td> *@
+@*                     <td> *@
+@*                         <a class="btn btn-primary" asp-controller="Home" asp-action="EditCustomer" asp-route-id="@customer.customer_ID">Edit</a> *@
+@*                         <button type="button" class="btn btn-danger" id="confirmSubmitButton" asp-controller="Home" asp-action="DeleteCustomer" asp-route-id="@customer.customer_ID">Delete</button> *@
+@*                     </td> *@
+@*                 </tr> *@
+@*                 } *@
+@*             </tbody> *@
+@*         </table> *@
+@* </div> *@
 
-<div page-model="@Model.PaginationInfo" page-action="ListCustomers"></div>
+
 

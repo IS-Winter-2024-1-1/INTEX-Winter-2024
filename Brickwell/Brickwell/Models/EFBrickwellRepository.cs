@@ -19,7 +19,11 @@ namespace Brickwell.Models
 
         public IQueryable<LineItem> LineItems => _context.LineItems;
 
-        public IQueryable<Recommendation> Recommendations => _context.Recommendations;
+        public IQueryable<ProductRecommendation> ProductRecommendations => _context.ProductRecommendations;
+
+        public IQueryable<CustomerRecommendation> CustomerRecommendations => _context.CustomerRecommendations;
+
+        public IQueryable<Favorite> Favorites => _context.Favorites;
 
         public void AddProduct(Product Product)
         {
@@ -57,21 +61,9 @@ namespace Brickwell.Models
             _context.SaveChanges();
         }
 
-        public void AddRecommendation(Recommendation Recommendation)
+        public void AddOrder(Order Order)
         {
-            _context.Add(Recommendation);
-            _context.SaveChanges();
-        }
-
-        public void RemoveRecommendation(Recommendation Recommendation)
-        {
-            _context.Remove(Recommendation);
-            _context.SaveChanges();
-        }
-
-        public void UpdateRecommendation(Recommendation Recommendation)
-        {
-            _context.Update(Recommendation);
+            _context.Add(Order);
             _context.SaveChanges();
         }
     }

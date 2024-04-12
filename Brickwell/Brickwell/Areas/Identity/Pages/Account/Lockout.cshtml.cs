@@ -3,7 +3,7 @@
 #nullable disable
 
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.AspNetCore.Mvc.RazorPages; using Brickwell.Models;
 
 namespace Brickwell.Areas.Identity.Pages.Account
 {

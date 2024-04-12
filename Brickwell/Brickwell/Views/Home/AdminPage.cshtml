@@ -2,12 +2,74 @@
     For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 *@
 @{
+    ViewData["Title"] = "Admin Page";
 }
+@model OrderListViewModel
 
-<div>
-    <a class="btn btn-primary" asp-controller="Home" asp-action="ListProducts">View Products</a>
-    <br />
-    <a class="btn btn-primary" asp-controller="Home" asp-action="ListCustomers">View Customers</a>
-    <br />
-    <a class="btn btn-danger" asp-controller="Home" asp-action="ListOrders">Review Fraudulent Orders</a>
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-md-12">
+			<div class="page-header">
+				<h1 class="text-white text-center">
+					Admin Dashboard
+				</h1>
+			</div>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-2">
+			<div id="sidebar">
+                            <header>
+                                <a class="nav-link" asp-controller="Home" asp-action="AdminPage">Admin Home</a>
+                            </header>
+                            <ul class="nav">
+                                <li>
+                                    <a class="nav-link" asp-controller="Home" asp-action="ListProducts">View Products</a>
+                                </li>
+                                <li>
+                                    <a class="nav-link" asp-controller="Home" asp-action="ListCustomers">View Customers</a>
+                                </li>
+                                <li>
+                                    <a class="nav-link" asp-controller="Home" asp-action="ListOrders">Review Fraudulent Orders</a>
+                                </li>
+                            </ul>
+                        </div>
+		</div>
+		<div class="col-md-10">
+			<h3 class="text-left">
+				Recent Orders
+			</h3>
+			<table class="table table-hover">
+				<thead>
+				<tr class="text-white">
+					<th scope="col">Transaction Id</th>
+					<th scope="col">Day of the Week</th>
+					<th scope="col">Date</th>
+					<th scope="col">Time</th>
+					<th scope="col">Amount</th>
+					<th scope="col">Country of Transaction</th>
+					<th scope="col">Shipping Address</th>
+					<th scope="col">Bank</th>
+					<th scope="col"></th>
+				</tr>
+				</thead>
+				<tbody>
+				@foreach (var order in Model.Orders)
+				{
+					<tr>
+						<th scope="row" class="text-dark" style="color: #666666;">@order.transaction_ID</th>
+						<td>@order.day_of_week</td>
+						<td>@order.date</td>
+						<td>@order.time</td>
+						<td>@order.amount</td>
+						<td>@order.country_of_transaction</td>
+						<td>@order.shipping_address</td>
+						<td>@order.bank</td>
+					</tr>
+				}
+				</tbody>
+			</table>
+		</div>
+	</div>
 </div>
+

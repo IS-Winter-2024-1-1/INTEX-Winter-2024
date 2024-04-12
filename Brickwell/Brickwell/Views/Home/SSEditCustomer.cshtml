@@ -1,0 +1,44 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+    ViewData["Title"] = "My Info";
+}
+
+@model Customer
+
+<h1>@ViewData["Title"]</h1>
+
+<form method="post">
+    <input asp-for="customer_ID" hidden><br>
+
+    <label asp-for="first_name">First Name:</label><br>
+    <input required asp-for="first_name" type="text" id="first_name" name="first_name"><br>
+
+    <label asp-for="last_name">Last Name:</label><br>
+    <input required asp-for="last_name" type="text" id="last_name" name="last_name"><br>
+
+    <label asp-for="birth_date">Birth Date:</label><br>
+    <input required asp-for="birth_date" type="date" id="birth_date" name="birth_date"><br>
+
+    <label asp-for="country_of_residence">Country of Residence:</label><br>
+    <select required asp-for="country_of_residence" id="country_of_residence" name="country_of_residence">
+        @foreach (var country in ViewBag.countries)
+        {
+            <option value="@country">@country</option>
+        }
+    </select>
+
+    <label asp-for="gender">Gender:</label><br />
+    <select required asp-for="gender" id="gender" name="gender">
+        <option value="M">Male</option>
+        <option value="F">Female</option>
+        <option value="O">Other</option>
+    </select><br />
+
+    <label asp-for="age">Age:</label><br>
+    <input required asp-for="age" type="number" id="age" name="age"><br>
+
+    <br>
+    <input type="submit" onclick="return confirm('Are you sure you want to save changes to your account information?')"value="Save" class="btn btn-primary">
+</form>
