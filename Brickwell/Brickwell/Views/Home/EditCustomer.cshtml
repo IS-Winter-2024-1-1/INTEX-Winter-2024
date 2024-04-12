@@ -9,7 +9,7 @@
 
 <h1>@ViewData["Title"]</h1>
 
-<form method="post">
+<form method="post" id="submissionForm">
     <input asp-for="customer_ID" hidden><br>
 
     <label asp-for="username">Username:</label><br>
@@ -54,6 +54,6 @@
     }
 
     <br>
-    <button type="button" class="btn btn-primary"></button>
+    <button id="confirmSubmitButton" type="button" class="btn btn-primary">Save</button>
 </form>
 <script src="~/js/confirmSubmit.js"></script>
