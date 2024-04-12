@@ -27,11 +27,13 @@
             <!-- Product actions -->
             <div class="product-actions">
                 <a class="btn btn-info" asp-controller="Home" asp-action="EditProduct" asp-route-id="@Model.product_ID">Edit</a>
-                <form asp-controller="Home" asp-action="DeleteProduct" method="post" style="display:inline;">
+                <form id="submissionForm" asp-controller="Home" asp-action="DeleteProduct" method="post" style="display:inline;">
                     <input type="hidden" name="product_ID" value="@Model.product_ID" />
-                    <button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete the @Model.name?')">Delete</button>
+                    <button id="confirmSubmitButton" type="button" class="btn btn-danger">Delete</button>
                 </form>
             </div>
         </div>
     </div>
 </div>
+
+<script src="~/js/confirmSubmit.js"></script>
